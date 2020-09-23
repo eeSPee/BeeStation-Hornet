@@ -1,6 +1,22 @@
 /*
 
-CARRION MOB
+BLOB/DRAGON HYBRID IDEA
+Insipred by Carrion Game
+
+Possibly midround antag, heretic finalspawn (alla lord of the night), or changeling superform. If you look at the game carrion, you know what it will look like.
+The main jist is, monstruous antag that can change its form to suit it's environment. Attacks people at range with tentacles. It can't heal directly like spess dragon, but fullheals when changing forms.
+Has 3 forms:
+	The small form can ventcrawl and stun people mostly.
+	The medium form is good at hunting people and 1 on 1 combat.
+	The largest form is the slowest and hardest to maintain. Good at fighting multiple people.
+
+Besides it's basic attacks, it has 3 ranged attacks
+	Basic tentacle deals knockback
+	Shift Click tentacle is good at draging people around
+	Ctrl Click is a ranged grasp/throw.
+	Tentacles change in strength depending on size
+
+Oh yea, working on a code where it can pick up weapons and fire them back at people.
 
 FIRING MODES
 	THROW ITEMS
@@ -26,65 +42,67 @@ Tentacle
 	ctrlclick pull
 	altclick grasp and throw
 
-description
-gobble weapons
-
 */
 
 
-/mob/living/simple_animal/hostile/beliar
+/mob/living/simple_animal/hostile/shoggoth
 	name = "hivebot"
 	desc = "A small robot."
+	speak_emote = list("states")
+	friendly = "stares down"
+	attacktext = "claws"
+	deathmessage = "screeches as its wings turn to dust and it collapses on the floor, life estinguished."
+	
+	attack_sound = 'sound/weapons/bladeslice.ogg'
+	deathsound = 'sound/magic/demon_dies.ogg'
+	projectilesound = 'sound/weapons/gunshot.ogg'
+	
 	icon = 'icons/mob/hivebot.dmi'
 	icon_state = "basic"
 	icon_living = "basic"
 	icon_dead = "basic"
+	
 	gender = NEUTER
-	mob_biotypes = list(MOB_ROBOTIC)
-	health = 100
-	maxHealth = 100
-	armour_penetration = 40
-	melee_damage = 40
-	pass_flags = PASSTABLE | PASSGRILLE
-	ventcrawler = VENTCRAWLER_ALWAYS
-	see_in_dark = 8
-	speed = 5
-	move_to_delay = 5	
-	minbodytemp = 0
-	maxbodytemp = 415
-	do_footstep = TRUE
-	obj_damage = 5
-	melee_damage = 35
-	speak_emote = list("states")
-	friendly = "stares down"
-	attacktext = "claws"
-	attack_sound = 'sound/weapons/bladeslice.ogg'
-	deathsound = 'sound/magic/demon_dies.ogg'
 	ranged = TRUE
-	projectilesound = 'sound/weapons/gunshot.ogg'
-	projectiletype = /obj/item/projectile/hivebotbullet
-	faction = list("neutral")
-	check_friendly_fire = 1
-	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
-	minbodytemp = 0
-	gold_core_spawnable = HOSTILE_SPAWN
-	del_on_death = 1
-	loot = list(/obj/effect/decal/cleanable/robot_debris)
-	deathmessage = "screeches as its wings turn to dust and it collapses on the floor, life estinguished."
-	hardattacks = TRUE	
-	//butcher_results = list(/obj/item/stack/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/bone = 30)
+	check_friendly_fire = 1	
+	hardattacks = FALSE	
+	do_footstep = TRUE
 	move_force = MOVE_FORCE_OVERPOWERING
 	move_resist = MOVE_FORCE_OVERPOWERING
 	pull_force = MOVE_FORCE_OVERPOWERING
+	
+	mob_biotypes = list(MOB_ROBOTIC)
+	faction = list("neutral")
+	
+	health = 100
+	maxHealth = 100
+	armour_penetration = 40
+	obj_damage = 5
+	melee_damage = 35
+	pass_flags = PASSTABLE | PASSGRILLE
+	ventcrawler = VENTCRAWLER_ALWAYS
+	speed = 5
+	move_to_delay = 5	
+	projectiletype = /obj/item/projectile/hivebotbullet
+	
+	see_in_dark = 8
+	damage_coeff = list(BRUTE = 1, BURN = 1.5, TOX = .75, CLONE = 2, STAMINA = 0, OXY = 0)
+	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
+	minbodytemp = 0
+	maxbodytemp = 415
+	
+	loot = list(/obj/effect/decal/cleanable/robot_debris)
+	//butcher_results = list(/obj/item/stack/ore/diamond = 5, /obj/item/stack/sheet/sinew = 5, /obj/item/stack/sheet/bone = 30)	
+	
+	
 	var/growthcost = 200
-	var/size = 1
-	var/obj/item/voreditem	
+	var/size = 2
+	var/obj/item/held_item = null
 	//hud_type
 
-/mob/living/simple_animal/hostile/beliar/Initialize()
+/mob/living/simple_animal/hostile/shoggoth/Initialize()
 	. = ..()		
-	set_nutrition(666)	//DEVIL NUMBER WOOoooOOOooo
-	Grow()
+	UpdateStats()
 	//init actions
 	
 	//var/obj/effect/proc_holder/spell/aoe_turf/repulse/spacedragon/repulse_action = new /obj/effect/proc_holder/spell/aoe_turf/repulse/spacedragon(src)
@@ -138,6 +156,12 @@ gobble weapons
 	if(target == src)
 		to_chat(src, "<span class='warning'>You almost bite yourself, but then decide against it.</span>")
 		return
+	if(isitem(target))
+		var/obj/item/I = target
+		if(I.loc != src && I.w_class <= WEIGHT_CLASS_HUGE )
+			to_chat(firer, "<span class='notice'>You pull [I] towards yourself.</span>")
+			I.transferItemToLoc( src )
+			held_item = I
 	if(istype(target, /turf/closed/wall))
 		if (size == 1)	// size dependent
 			return
@@ -192,10 +216,19 @@ gobble weapons
 			stat(null,"You are knocked out by high levels of BZ!")
 		else
 			stat(null,"Power Level: [powerlevel]")
+		stat("Held Item", held_item)
+
 
 /mob/living/simple_animal/hostile/shoggoth/Shoot(atom/targeted_atom)
 
 	//attack/shove
+	
+	//throw held item
+	if (held_item != null)
+		held_item.forceMove(drop_location())
+		src.throw_at(held_item, 6+size*2, 1+size)
+		held_item = null
+		return
 	
 	if ( projectiletype == null )		
 		if ( size == 1 )
@@ -252,6 +285,10 @@ gobble weapons
 			
 			revive(full_heal = 1)
 			return
+	else
+		if(held_item)
+			held_item.forceMove(drop_location())
+			held_item = null
 	stat = DEAD
 	return ..(true)	//always gib if size 1
 
@@ -303,7 +340,9 @@ gobble weapons
 	
 //deals puny brute damage, and knocks the target away
 /obj/item/projectile/eightacle/puny/retreat/on_hit(atom/target, blocked = FALSE)	
-	..()
+	var/mob/living/carbon/human/H = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK
 	if(isliving(target))
 		var/mob/living/L = target
 		if(!L.anchored && !L.throwing)
@@ -322,7 +361,9 @@ gobble weapons
 	
 //deals some stamina damage damage, and knocks the target down
 /obj/item/projectile/eightacle/puny/disarm/on_hit(atom/target, blocked = FALSE)	
-	..()
+	var/mob/living/carbon/human/H = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK
 	if(isliving(target))
 		var/mob/living/L = target	
 		// ??? SLIPPED LEGS + DROP WEAPON
@@ -347,8 +388,10 @@ gobble weapons
 /obj/item/projectile/eightacle/repel
 	
 //apply damage, knockback
-/obj/item/projectile/eightacle/repel/on_hit(atom/target, blocked = FALSE)	
-	..()
+/obj/item/projectile/eightacle/repel/on_hit(atom/target, blocked = FALSE)
+	var/mob/living/carbon/human/H = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK	
 	if(isliving(target))
 		var/mob/living/L = target
 		if(!L.anchored && !L.throwing)
@@ -364,7 +407,9 @@ gobble weapons
 	
 //apply damage, knockback
 /obj/item/projectile/eightacle/drag/on_hit(atom/target, blocked = FALSE)	
-	..()
+	var/mob/living/carbon/human/H = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK
 	if(isliving(target))
 		var/mob/living/L = target
 		if(!L.anchored && !L.throwing)
@@ -377,17 +422,27 @@ gobble weapons
 
 // > MEH TENTACLES - GRAB <
 /obj/item/projectile/eightacle/grasp
-	damage = 14
+	damage = 10
 	
 //apply damage, knockback
 /obj/item/projectile/eightacle/grasp/on_hit(atom/target, blocked = FALSE)	
-	..()
-	if(isliving(target))
+	var/mob/living/carbon/human/H = firer
+	if(blocked >= 100)
+		return BULLET_ACT_BLOCK
+	if(isitem(target))
+		var/obj/item/I = target
+		if(I.loc != src && I.w_class <= WEIGHT_CLASS_HUGE )
+			to_chat(firer, "<span class='notice'>You pull [I] towards yourself.</span>")
+			I.transferItemToLoc( src )
+			held_item = I
+			. = BULLET_ACT_HIT
+	else if(isliving(target))
 		var/mob/living/L = target
 		if(!L.anchored && !L.throwing)
 			if(iscarbon(L))					
 				var/mob/living/carbon/C = L
-				C.apply_damage(damage, damage_type, BODY_ZONE_CHEST)
+				//NO LONGER C.apply_damage(damage, damage_type, BODY_ZONE_CHEST)
+				C.Paralyze(damage)
 				C.visible_message("<span class='danger'>[L] is pulled by [H]'s tentacle!</span>","<span class='userdanger'>A tentacle grabs you and pulls you towards [H]!</span>")
 				C.grabbedby(src)
 				C.grippedby(src, instant = TRUE) //instant aggro grab
@@ -414,11 +469,9 @@ gobble weapons
 // > STRONG TENTACLES - GRAB <
 /obj/item/projectile/eightacle/grasp/strong
 	range = 8
-	damage = 20
-	damage_type = BRUTE
+	damage = 15
 	
 // > STRONG TENTACLES - GRAB <
 /obj/item/projectile/eightacle/grasp/puny
 	range = 5
-	damage = 10
-	damage_type = BRUTE
+	damage = 5
