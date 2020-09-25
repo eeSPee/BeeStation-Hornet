@@ -52,7 +52,7 @@
 		var/shottype = ammo_type[i]
 		shot = new shottype(src)
 		ammo_type[i] = shot
-	shot = ammo_type[select]
+	shot = GetAmmoType()
 	fire_sound = shot.fire_sound
 	fire_delay = shot.delay
 
@@ -85,7 +85,7 @@
 		update_icon()
 
 /obj/item/gun/energy/can_shoot()
-	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
+	var/obj/item/ammo_casing/energy/shot = GetAmmoType()
 	return !QDELETED(cell) ? (cell.charge >= shot.e_cost) : FALSE
 
 /obj/item/gun/energy/recharge_newshot(no_cyborg_drain)
@@ -95,11 +95,11 @@
 		if(iscyborg(loc))
 			var/mob/living/silicon/robot/R = loc
 			if(R.cell)
-				var/obj/item/ammo_casing/energy/shot = ammo_type[select] //Necessary to find cost of shot
+				var/obj/item/ammo_casing/energy/shot = GetAmmoType() //Necessary to find cost of shot
 				if(R.cell.use(shot.e_cost)) 		//Take power from the borg...
 					cell.give(shot.e_cost)	//... to recharge the shot
 	if(!chambered)
-		var/obj/item/ammo_casing/energy/AC = ammo_type[select]
+		var/obj/item/ammo_casing/energy/AC = GetAmmoType()
 		if(cell.charge >= AC.e_cost) //if there's enough power in the cell cell...
 			chambered = AC //...prepare a new shot based on the current ammo type selected
 			if(!chambered.BB)
@@ -126,7 +126,7 @@
 	select++
 	if (select > ammo_type.len)
 		select = 1
-	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
+	var/obj/item/ammo_casing/energy/shot = GetAmmoType()
 	fire_sound = shot.fire_sound
 	fire_delay = shot.delay
 	if (shot.select_name)
@@ -147,7 +147,7 @@
 		return
 	old_ratio = ratio
 	cut_overlays()
-	var/obj/item/ammo_casing/energy/shot = ammo_type[select]
+	var/obj/item/ammo_casing/energy/shot = GetAmmoType()
 	var/iconState = "[icon_state]_charge"
 	var/itemState = null
 	if(!initial(item_state))
@@ -179,7 +179,7 @@
 		if(user.is_holding(src))
 			user.visible_message("<span class='suicide'>[user] melts [user.p_their()] face off with [src]!</span>")
 			playsound(loc, fire_sound, 50, 1, -1)
-			var/obj/item/ammo_casing/energy/shot = ammo_type[select]
+			var/obj/item/ammo_casing/energy/shot = GetAmmoType()
 			cell.use(shot.e_cost)
 			update_icon()
 			return(FIRELOSS)
@@ -203,11 +203,11 @@
 
 
 /obj/item/gun/energy/ignition_effect(atom/A, mob/living/user)
-	if(!can_shoot() || !ammo_type[select])
+	if(!can_shoot() || !GetAmmoType())
 		shoot_with_empty_chamber()
 		. = ""
 	else
-		var/obj/item/ammo_casing/energy/E = ammo_type[select]
+		var/obj/item/ammo_casing/energy/E = GetAmmoType()
 		var/obj/item/projectile/energy/BB = E.BB
 		if(!BB)
 			. = ""
@@ -229,3 +229,6 @@
 			playsound(user, BB.hitsound, 50, 1)
 			cell.use(E.e_cost)
 			. = "<span class='danger'>[user] casually lights their [A.name] with [src]. Damn.</span>"
+
+/obj/item/gun/energy/proc/GetAmmoType()
+	return ammo_type[select]
