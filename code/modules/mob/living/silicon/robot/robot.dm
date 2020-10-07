@@ -22,6 +22,7 @@
 
 	var/obj/item/clockwork/clockwork_slab/internal_clock_slab = null
 	var/ratvar = FALSE
+	var/adaption_points = 0 // adaptive thing
 
 //Hud stuff
 
