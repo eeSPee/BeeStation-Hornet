@@ -51,29 +51,26 @@
 			if (SPEC == src)	//modules already present
 				to_chat(user, "<span class='warning'>This unit is already equipped with a [src].</span>")
 				return FALSE
-
-			//in case of different module, change entirely
-			SPEC.deactivate(R, user)
-			R.upgrades -= SPEC
-			qdel(SPEC)
-
-
-	for(var/module in src.addmodules)
-		var/item = locate(module) in R
-		if (!item)
-			item = new(R.module)
-			R.module.basic_modules += item
-			R.module.add_module(item, FALSE, TRUE)
+	
+		R.adaption_points = R.adaption_points + point_cost
+		for(var/module in src.addmodules)
+			var/item = locate(module) in R
+			if (!item)
+				item = new(R.module)
+				R.module.basic_modules += item
+				R.module.add_module(item, FALSE, TRUE)
 	return .
 
 /obj/item/borg/upgrade/adaptation/deactivate(mob/living/silicon/robot/R, user = usr)
 	. = ..()
 	if (.)		
+		R.adaption_points = R.adaption_points + point_cost
 		//Remove existing modules indiscriminately
 		for(var/module in src.addmodules)
 			var/item = locate(module) in R
 			if (item)
 				R.module.remove_module(item, TRUE)
+	return .
 
 //	----------------------------------
 //	>> ADAPTIVE MODULES ENGINEERING <<
