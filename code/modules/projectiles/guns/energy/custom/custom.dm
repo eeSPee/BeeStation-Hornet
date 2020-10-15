@@ -22,10 +22,12 @@
 	can_flashlight = TRUE
 		
 	var/disassembled = TRUE
-	var/obj/item/payload/payload
+	var/obj/item/payload/payloadA
 	var/obj/item/mechanism/mechanism
 	//firing pin
 	//power cell
+	var/multiplePayloads = FALSE
+	var/obj/item/payload/payloadB
 	
 /obj/item/gun/energy/custom/Initialize()
 	..()
