@@ -51,6 +51,11 @@
 
 	C.fully_replace_character_name("[pick(GLOB.nightmare_names)]")
 
+/datum/species/shadow/nightmare/random_name(gender,unique,lastname)
+	var/first_name = pick("Night","Wraith","Dark","Evil","Fear","Shadow","Shroud","Chaos")
+	var/last_name = pick("mare","digo","lin","bringer","lord","king","kin","dinn","nia","wielder")		
+	return "[first_name][last_name]"
+
 /datum/species/shadow/nightmare/bullet_act(obj/item/projectile/P, mob/living/carbon/human/H)
 	var/turf/T = H.loc
 	if(istype(T))
