@@ -17,9 +17,9 @@
 
 	// Stuff needed to render the map
 	var/map_name
-	var/obj/screen/map_view/cam_screen
-	var/obj/screen/plane_master/lighting/cam_plane_master
-	var/obj/screen/background/cam_background
+	var/atom/movable/screen/map_view/cam_screen
+	var/atom/movable/screen/plane_master/lighting/cam_plane_master
+	var/atom/movable/screen/background/cam_background
 
 /obj/machinery/computer/security/Initialize()
 	. = ..()
@@ -127,10 +127,11 @@
 			return TRUE
 
 		var/list/visible_turfs = list()
-		for(var/turf/T in (C.isXRay() \
-				? range(C.view_range, C) \
-				: view(C.view_range, get_turf(C))))
-			visible_turfs += T
+		if(C.isXRay())
+			visible_turfs += RANGE_TURFS(C.view_range, C)
+		else
+			for(var/turf/T in view(C.view_range, get_turf(C)))
+				visible_turfs += T
 
 		var/list/bbox = get_bbox_of_atoms(visible_turfs)
 		var/size_x = bbox[3] - bbox[1] + 1

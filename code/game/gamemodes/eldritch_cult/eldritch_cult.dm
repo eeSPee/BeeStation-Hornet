@@ -4,13 +4,15 @@
 	report_type = "heresy"
 	antag_flag = ROLE_HERETIC
 	false_report_weight = 5
-	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain", "Brig Physician")
+	protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Captain")
 	restricted_jobs = list("AI", "Cyborg")
 	required_players = 0
 	required_enemies = 1
 	recommended_enemies = 4
 	reroll_friendly = 1
 	enemy_minimum_age = 0
+
+	allowed_special = list(/datum/special_role/traitor/higher_chance)
 
 	announce_span = "danger"
 	announce_text = "Heretics have been spotted on the station!\n\

@@ -10,8 +10,8 @@
 	var/mood_modifier = 1 //Modifier to allow certain mobs to be less affected by moodlets
 	var/list/datum/mood_event/mood_events = list()
 	var/insanity_effect = 0 //is the owner being punished for low mood? If so, how much?
-	var/obj/screen/mood/screen_obj
-	var/obj/screen/sanity/screen_obj_sanity
+	var/atom/movable/screen/mood/screen_obj
+	var/atom/movable/screen/sanity/screen_obj_sanity
 
 /datum/component/mood/Initialize()
 	if(!isliving(parent))
@@ -186,7 +186,7 @@
 		if(6)
 			setSanity(sanity+0.2, maximum=SANITY_GREAT)
 		if(7)
-			setSanity(sanity+0.3, maximum=INFINITY)
+			setSanity(sanity+0.3, maximum=SANITY_GREAT)
 		if(8)
 			setSanity(sanity+0.4, maximum=SANITY_MAXIMUM)
 		if(9)
@@ -277,6 +277,11 @@
 	mood_events -= category
 	qdel(event)
 	update_mood()
+
+/datum/component/mood/proc/get_event(category)
+	if(!istext(category))
+		category = REF(category)
+	return mood_events[category]
 
 /datum/component/mood/proc/remove_temp_moods(var/admin) //Removes all temp moods
 	for(var/i in mood_events)
