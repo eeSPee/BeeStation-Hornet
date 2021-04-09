@@ -33,7 +33,12 @@
 	gold_core_spawnable = NO_SPAWN
 	deathsound = 'sound/voice/hiss6.ogg'
 	deathmessage = "lets out a waning guttural screech, green blood bubbling from its maw..."
+<<<<<<< HEAD
 	mobsay_color = "#9EE08F"
+=======
+	chat_color = "#9EE08F"
+	mobchatspan = "alienmobsay"
+>>>>>>> upstream/master
 
 	do_footstep = TRUE
 

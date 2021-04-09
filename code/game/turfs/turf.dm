@@ -459,8 +459,18 @@
 				var/atom/movable/AM = A
 				if(!AM.ex_check(explosion_id))
 					continue
+<<<<<<< HEAD
 			A.ex_act(severity, target)
 			CHECK_TICK
+=======
+				switch(severity)
+					if(EXPLODE_DEVASTATE)
+						SSexplosions.high_mov_atom += movable_thing
+					if(EXPLODE_HEAVY)
+						SSexplosions.med_mov_atom += movable_thing
+					if(EXPLODE_LIGHT)
+						SSexplosions.low_mov_atom += movable_thing
+>>>>>>> upstream/master
 
 /turf/narsie_act(force, ignore_mobs, probability = 20)
 	. = (prob(probability) || force)

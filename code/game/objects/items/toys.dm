@@ -204,7 +204,7 @@
 		return
 	src.add_fingerprint(user)
 	if (src.bullets < 1)
-		user.show_message("<span class='warning'>*click*</span>", 2)
+		user.show_message("<span class='warning'>*click*</span>", MSG_AUDIBLE)
 		playsound(src, 'sound/weapons/gun_dry_fire.ogg', 30, TRUE)
 		return
 	playsound(user, 'sound/weapons/gunshot.ogg', 100, 1)
@@ -1429,7 +1429,7 @@
 	to_chat(user, "You name the dummy as \"[doll_name]\"")
 	name = "[initial(name)] - [doll_name]"
 
-/obj/item/toy/dummy/talk_into(atom/movable/A, message, channel, list/spans, datum/language/language)
+/obj/item/toy/dummy/talk_into(atom/movable/A, message, channel, list/spans, datum/language/language, list/message_mods)
 	var/mob/M = A
 	if (istype(M))
 		M.log_talk(message, LOG_SAY, tag="dummy toy")
@@ -1476,4 +1476,205 @@
 
 /obj/item/storage/box/heretic_asshole/PopulateContents()
 	for(var/i in 1 to rand(1,4))
+<<<<<<< HEAD
 		new /obj/item/toy/reality_pierce(src)
+=======
+		new /obj/item/toy/reality_pierce(src)
+
+// Serviceborg items
+
+/*
+|| Cyborg playing cards module. ||
+*/
+
+/obj/item/toy/cards/deck/cyborg
+	name = "dealer module"
+	desc = "A module for handling, fabricating cards and tricking suckers into gambling awaya their money. Ctrl Click to fabricate a new set of cards."
+
+/obj/item/toy/cards/deck/cyborg/update_icon()
+	icon_state = "deck_[deckstyle]_full"
+
+/obj/item/toy/cards/deck/cyborg/CtrlClick(mob/user)
+	..()
+	if(iscyborg(user))
+		var/mob/living/silicon/robot/R = user
+		if(R.cell?.use(300))
+			populate_deck()
+			to_chat(user, "<span class='notice'>You fabricate a new set of cards.</span>")
+
+/obj/item/toy/cards/deck/cyborg/afterattack(atom/A, mob/user, proximity)
+	. = ..()
+	if (istype(A, /obj/item/toy/cards/singlecard))
+		var/obj/item/toy/cards/singlecard/SC = A
+		if(SC.parentdeck == src)
+			if(!user.temporarilyRemoveItemFromInventory(SC))
+				to_chat(user, "<span class='warning'>The card is stuck to your hand, you can't add it to the deck!</span>")
+				return
+			cards += SC.cardname
+			user.visible_message("<span class='notice'>[user] adds a card to the bottom of the deck.</span>","<span class='notice'>You add the card to the bottom of the deck.</span>")
+			qdel(SC)
+		else
+			to_chat(user, "<span class='warning'>You can't mix cards from other decks!</span>")
+		update_icon()
+	else if (istype(A, /obj/item/toy/cards/cardhand))
+		var/obj/item/toy/cards/cardhand/CH = A
+		if(CH.parentdeck == src)
+			cards += CH.currenthand
+			user.visible_message("<span class='notice'>[user] puts [user.p_their()] hand of cards in the deck.</span>", "<span class='notice'>You put the hand of cards in the deck.</span>")
+			qdel(CH)
+		else
+			to_chat(user, "<span class='warning'>You can't mix cards from other decks!</span>")
+		update_icon()
+
+	var/choice = null
+	if(!LAZYLEN(cards))
+		to_chat(user, "<span class='warning'>There are no more cards to draw!</span>")
+		return
+
+	choice = cards[1]
+	var/obj/item/toy/cards/singlecard/H = new/obj/item/toy/cards/singlecard(get_turf(A))
+	H.cardname = choice
+	H.parentdeck = src
+	var/O = src
+	H.apply_card_vars(H,O)
+	cards.Cut(1,2) //Removes the top card from the list
+
+	if(!proximity)
+		H.forceMove(get_turf(src))
+		H.throw_at(get_turf(A), 10 , 1 , user)
+
+////////////////////
+//money eater/maker//
+////////////////////
+
+/obj/item/gobbler
+	name = "Coin Gobbler"
+	desc = "Feed it credits, and activate it, with a chance to spit out DOUBLE the amount!"
+	icon = 'icons/obj/plushes.dmi'
+	icon_state = "debug"
+	var/money = 0
+	var/moneyeaten = 0
+	var/cooldown = 0
+	var/cooldowndelay = 20
+	w_class = WEIGHT_CLASS_NORMAL
+
+/obj/item/gobbler/examine(mob/user)
+	. = ..()
+	. += "<span class='notice'>The Coin Gobbler holds [money] credits.</span>"
+
+/obj/item/gobbler/attackby()
+	return
+
+/obj/item/gobbler/attack_self(mob/user)
+	if(cooldown > world.time)
+		return
+	cooldown = world.time + cooldowndelay
+	if (money<=0)
+		to_chat(user, "<span class='notice'>The [src] has no money stored.</span>")
+		return
+
+	playsound(src.loc, 'sound/creatures/rattle.ogg', 10, 1)
+	user.visible_message("<span class='notice'>[src]'s eyes start spinning! What will happen?</span>", \
+		"<span class='notice'>You activate [src].</span>")
+	sleep(10)
+
+	if(prob(33*(777+moneyeaten-money)/777))
+		playsound(src.loc, 'sound/arcade/win.ogg', 10, 1)
+		user.visible_message("<span class='warning'>[src] cashes out! [user] starts spitting credits!</span>", \
+		"<span class='notice'>[src] cashes out!</span>")
+		var/obj/item/holochip/payout = new (user.drop_location(), money*2)
+		payout.throw_at( get_step(loc,user.dir) ,3,1,user)
+		moneyeaten-=money
+		money=0
+	else
+		user.visible_message("<span class='notice'>[src] gobbles up all the money!</span>", \
+		"<span class='notice'>[src] gobbles up all the money!</span>")
+		moneyeaten+=money
+		money=0
+		playsound(src.loc, 'sound/machines/buzz-sigh.ogg', 10, 1)
+
+/obj/item/gobbler/afterattack(atom/A, mob/user, proximity)
+	. = ..()
+	if(!proximity)
+		return
+	var/cash_money = 0
+
+	if(istype(A, /obj/item/holochip))
+		var/obj/item/holochip/HC = A
+		cash_money = HC.get_item_credit_value()
+	else if(istype(A, /obj/item/stack/spacecash))
+		var/obj/item/stack/spacecash/SC = A
+		cash_money = SC.get_item_credit_value()
+	else if(istype(A, /obj/item/coin))
+		var/obj/item/coin/CN = A
+		cash_money = CN.get_item_credit_value()
+
+	if (!cash_money)
+		to_chat(user, "<span class='warning'>[src] spits out [A] as it is not worth anything!</span>")
+		return
+	money+=cash_money
+	to_chat(user, "<span class='notice'>[src] quicky gobbles up [A], and the value goes up by [cash_money].</span>")
+	qdel(A)
+
+/obj/item/dance_trance
+	name = "Dance Fever"
+	desc = "Makes everyone dance!"
+	icon = 'icons/obj/grenade.dmi'
+	icon_state = "disco_active"
+	var/flip_cooldown = 0
+
+/obj/item/dance_trance/attack()
+	if(flip_cooldown < world.time)
+		flip_mobs()
+	return ..()
+
+/obj/item/dance_trance/attack_self(mob/user)
+	if(flip_cooldown < world.time)
+		flip_mobs()
+	..()
+
+/obj/item/dance_trance/proc/flip_mobs(mob/living/carbon/M, mob/user)
+	for(M in ohearers(7, get_turf(src)))
+		if(ishuman(M) && M.can_hear())
+			var/mob/living/carbon/human/H = M
+			if(istype(H.ears, /obj/item/clothing/ears/earmuffs))
+				continue
+		switch (rand(1,3))
+			if (1)
+				M.emote("flip")
+				M.emote("spin")
+			if (2)
+				M.emote("flip")
+			if (3)
+				M.emote("spin")
+	flip_cooldown = world.time + 20
+
+
+/obj/item/storage/pill_bottle/dice_cup/cyborg
+	desc = "The house always wins..."
+/obj/item/storage/pill_bottle/dice_cup/cyborg/Initialize()
+	. = ..()
+	new /obj/item/dice/d6(src)
+	new /obj/item/dice/d6(src)
+
+
+/obj/item/storage/box/yatzy
+	name = "Game of Yatzy"
+	desc = "Contains all the pieces required to play a game of Yatzy with up to 4 friends!"
+
+/obj/item/storage/box/yatzy/PopulateContents()
+	new /obj/item/storage/pill_bottle/dice_cup/yatzy(src)
+	new /obj/item/paper/yatzy(src)
+	new /obj/item/paper/yatzy(src)
+	new /obj/item/paper/yatzy(src)
+	new /obj/item/paper/yatzy(src)
+
+/obj/item/storage/pill_bottle/dice_cup/yatzy/Initialize()
+	. = ..()
+	for(var/dice in 1 to 5)
+		new /obj/item/dice/d6(src)
+
+/obj/item/paper/yatzy
+	name = "paper - Yatzy Table"
+	info = "<table><tr><th>Upper</th><th>Game 1</th><th>Game 2</th><th>Game 3</th></tr><tr><th>Aces</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Twos</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Threes</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Fours</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Fives</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Sixes</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Total</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Upper Total</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th><b>Bonus</b></th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>1 Pair</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>2 Pairs</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th><th>3 of a Kind</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th><th>4 of a Kind</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Full House</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Sm. Straight</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Lg. Straight</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Yatzy</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Chance</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th>Lower Total</th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr><th><b>Grand Total</b></th><th>\[___\]</th><th>\[___\]</th><th>\[___\]</th></tr></table>"
+>>>>>>> upstream/master

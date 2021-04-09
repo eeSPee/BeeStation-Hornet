@@ -20,7 +20,12 @@
 	var/obj/item/inventory_head
 	var/obj/item/inventory_mask
 	gold_core_spawnable = FRIENDLY_SPAWN
+<<<<<<< HEAD
 	mobsay_color = "#FFA656"
+=======
+	chat_color = "#FFA656"
+	mobchatspan = "blob"
+>>>>>>> upstream/master
 	hardattacks = TRUE//claws
 
 /mob/living/simple_animal/crab/Life()

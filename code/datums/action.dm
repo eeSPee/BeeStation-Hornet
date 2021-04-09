@@ -493,7 +493,7 @@
 			H.attack_self(owner)
 			return
 	var/obj/item/I = target
-	if(owner.can_equip(I, SLOT_HANDS))
+	if(owner.can_equip(I, ITEM_SLOT_HANDS))
 		owner.temporarilyRemoveItemFromInventory(I)
 		owner.put_in_hands(I)
 		I.attack_self(owner)
@@ -511,10 +511,9 @@
 	background_icon_state = "bg_agent"
 	icon_icon = 'icons/mob/actions/actions_items.dmi'
 	button_icon_state = "deploy_box"
-	///Cooldown between deploys. Uses world.time
-	var/cooldown = 0
 	///The type of closet this action spawns.
 	var/boxtype = /obj/structure/closet/cardboard/agent
+	COOLDOWN_DECLARE(box_cooldown)
 
 ///Handles opening and closing the box.
 /datum/action/item_action/agent_box/Trigger()
@@ -530,11 +529,12 @@
 	if(!isturf(owner.loc)) //Don't let the player use this to escape mechs/welded closets.
 		to_chat(owner, "<span class = 'notice'>You need more space to activate this implant.</span>")
 		return
-	if(cooldown < world.time - 100)
-		var/box = new boxtype(owner.drop_location())
-		owner.forceMove(box)
-		cooldown = world.time
-		owner.playsound_local(box, 'sound/misc/box_deploy.ogg', 50, TRUE)
+	if(!COOLDOWN_FINISHED(src, box_cooldown))
+		return
+	COOLDOWN_START(src, box_cooldown, 10 SECONDS)
+	var/box = new boxtype(owner.drop_location())
+	owner.forceMove(box)
+	owner.playsound_local(box, 'sound/misc/box_deploy.ogg', 50, TRUE)
 
 //Preset for spells
 /datum/action/spell_action
@@ -633,7 +633,7 @@
 
 /datum/action/cooldown/proc/StartCooldown()
 	next_use_time = world.time + cooldown_time
-	button.maptext = "<b>[round(cooldown_time/10, 0.1)]</b>"
+	button.maptext = MAPTEXT("<b>[round(cooldown_time/10, 0.1)]</b>")
 	UpdateButtonIcon()
 	START_PROCESSING(SSfastprocess, src)
 
@@ -647,7 +647,7 @@
 		UpdateButtonIcon()
 		STOP_PROCESSING(SSfastprocess, src)
 	else
-		button.maptext = "<b>[round(timeleft/10, 0.1)]</b>"
+		button.maptext = MAPTEXT("<b>[round(timeleft/10, 0.1)]</b>")
 
 /datum/action/cooldown/Grant(mob/M)
 	..()

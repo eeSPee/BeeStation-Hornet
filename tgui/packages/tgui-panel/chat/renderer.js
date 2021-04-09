@@ -52,6 +52,69 @@ const createReconnectedNode = () => {
   return node;
 };
 
+<<<<<<< HEAD
+=======
+// Removes job formatting
+const formatHighContrast = inputHtml => {
+  const replacementNodes = [
+    "unknown",
+    "assistant",
+    "atmospherictechnician",
+    "bartender",
+    "botanist",
+    "brigphysician",
+    "captain",
+    "cargotechnician",
+    "chaplain",
+    "chemist",
+    "chiefengineer",
+    "chiefmedicalofficer",
+    "clown",
+    "cook",
+    "curator",
+    "deputy",
+    "detective",
+    "paramedic",
+    "geneticist",
+    "headofpersonnel",
+    "headofsecurity",
+    "janitor",
+    "lawyer",
+    "medicaldoctor",
+    "mime",
+    "quartermaster",
+    "researchdirector",
+    "roboticist",
+    "scientist",
+    "securityofficer",
+    "shaftminer",
+    "stationengineer",
+    "virologist",
+    "warden",
+    "centcom",
+    "prisoner",
+    "blob",
+    "corgi",
+    "fox",
+    "rainbow",
+    "hierosay",
+    "brassmobsay",
+    "syndmob",
+    "alienmobsay",
+    "cultmobsay",
+    "slimemobsay",
+    "gimmick",
+    "barber",
+    "stagemagician",
+    "debtor",
+    "psychiatrist",
+    "vip",
+  ];
+  const spanRegex = new RegExp('(<span[\\w| |\t|=]*[\'|"][\\w| ]*)(?:' + replacementNodes.join('|') + ')([\'|"]>)', 'gi');
+  return inputHtml.replace(spanRegex, '$1$2');
+};
+
+>>>>>>> upstream/master
 const handleImageError = e => {
   setTimeout(() => {
     /** @type {HTMLImageElement} */

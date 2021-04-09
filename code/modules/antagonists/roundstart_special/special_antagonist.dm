@@ -16,7 +16,12 @@
 	//----Required for roundspawn----
 	var/allowAntagTargets = FALSE	//Not used in events
 	var/latejoin_allowed = TRUE		//Can latejoins be assigned to this? If you want this to be a midround spawn, put these in the round_event
+<<<<<<< HEAD
 	var/list/protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Head of Personnel", "Chief Medical Officer", "Chief Engineer", "Research Director", "Captain", "Brig Physician")
+=======
+	var/list/restricted_jobs = list("Cyborg")
+	var/list/protected_jobs = list("Security Officer", "Warden", "Detective", "Head of Security", "Head of Personnel", "Chief Medical Officer", "Chief Engineer", "Research Director", "Captain")
+>>>>>>> upstream/master
 	//----Required for midround----
 	var/weight = 10
 	var/earliest_start = 20 MINUTES

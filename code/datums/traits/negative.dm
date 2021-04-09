@@ -45,7 +45,7 @@
 /datum/quirk/blindness/on_spawn()
 	var/mob/living/carbon/human/H = quirk_holder
 	var/obj/item/clothing/glasses/blindfold/white/B = new(get_turf(H))
-	if(!H.equip_to_slot_if_possible(B, SLOT_GLASSES, bypass_equip_delay_self = TRUE)) //if you can't put it on the user's eyes, put it in their hands, otherwise put it on their eyes
+	if(!H.equip_to_slot_if_possible(B, ITEM_SLOT_EYES, bypass_equip_delay_self = TRUE)) //if you can't put it on the user's eyes, put it in their hands, otherwise put it on their eyes
 		H.put_in_hands(B)
 	H.regenerate_icons()
 
@@ -60,6 +60,25 @@
 /datum/quirk/brainproblems/on_process()
 	quirk_holder.adjustOrganLoss(ORGAN_SLOT_BRAIN, 0.2)
 
+<<<<<<< HEAD
+=======
+/datum/quirk/brainproblems/on_spawn()
+	var/mob/living/carbon/human/H = quirk_holder
+	var/obj/item/storage/pill_bottle/mannitol/braintumor/P = new(get_turf(H))
+
+	var/slot = H.equip_in_one_of_slots(P, list(ITEM_SLOT_LPOCKET, ITEM_SLOT_RPOCKET, ITEM_SLOT_BACKPACK), FALSE)
+	if(slot)
+		var/list/slots = list(
+		ITEM_SLOT_LPOCKET = "in your left pocket",
+		ITEM_SLOT_RPOCKET = "in your right pocket",
+		ITEM_SLOT_BACKPACK = "in your backpack"
+		)
+		where = slots[slot]
+
+/datum/quirk/brainproblems/post_add()
+	to_chat(quirk_holder, "<span class='boldnotice'>There is a bottle of mannitol [where]. You're going to need it.</span>")
+
+>>>>>>> upstream/master
 /datum/quirk/deafness
 	name = "Deaf"
 	desc = "You are incurably deaf."
@@ -103,7 +122,7 @@
 			if("Clown")
 				heirloom_type = /obj/item/bikehorn/golden
 			if("Mime")
-				heirloom_type = /obj/item/reagent_containers/food/snacks/baguette
+				heirloom_type = /obj/item/reagent_containers/food/snacks/baguette/mime
 			if("Janitor")
 				heirloom_type = pick(/obj/item/mop, /obj/item/clothing/suit/caution, /obj/item/reagent_containers/glass/bucket)
 			if("Cook")
@@ -179,9 +198,9 @@
 		/obj/item/dice/d20)
 	heirloom = new heirloom_type(get_turf(quirk_holder))
 	var/list/slots = list(
-		"in your left pocket" = SLOT_L_STORE,
-		"in your right pocket" = SLOT_R_STORE,
-		"in your backpack" = SLOT_IN_BACKPACK
+		"in your left pocket" = ITEM_SLOT_LPOCKET,
+		"in your right pocket" = ITEM_SLOT_RPOCKET,
+		"in your backpack" = ITEM_SLOT_BACKPACK
 	)
 	where = H.equip_in_one_of_slots(heirloom, slots, FALSE) || "at your feet"
 
@@ -290,7 +309,7 @@
 	var/mob/living/carbon/human/H = quirk_holder
 	var/obj/item/clothing/glasses/regular/glasses = new(get_turf(H))
 	H.put_in_hands(glasses)
-	H.equip_to_slot(glasses, SLOT_GLASSES)
+	H.equip_to_slot(glasses, ITEM_SLOT_EYES)
 	H.regenerate_icons() //this is to remove the inhand icon, which persists even if it's not in their hands
 
 /datum/quirk/nyctophobia
@@ -500,9 +519,9 @@
 	if (accessory_type)
 		accessory_instance = new accessory_type(current_turf)
 	var/list/slots = list(
-		"in your left pocket" = SLOT_L_STORE,
-		"in your right pocket" = SLOT_R_STORE,
-		"in your backpack" = SLOT_IN_BACKPACK
+		"in your left pocket" = ITEM_SLOT_LPOCKET,
+		"in your right pocket" = ITEM_SLOT_RPOCKET,
+		"in your backpack" = ITEM_SLOT_BACKPACK
 	)
 	where_drug = H.equip_in_one_of_slots(drug_instance, slots, FALSE) || "at your feet"
 	if (accessory_instance)
@@ -555,7 +574,7 @@
 /datum/quirk/junkie/smoker/on_process()
 	. = ..()
 	var/mob/living/carbon/human/H = quirk_holder
-	var/obj/item/I = H.get_item_by_slot(SLOT_WEAR_MASK)
+	var/obj/item/I = H.get_item_by_slot(ITEM_SLOT_MASK)
 	if (istype(I, /obj/item/clothing/mask/cigarette))
 		var/obj/item/storage/fancy/cigarettes/C = drug_container_type
 		if(istype(I, initial(C.spawn_type)))
@@ -563,6 +582,68 @@
 			return
 		SEND_SIGNAL(quirk_holder, COMSIG_ADD_MOOD_EVENT, "wrong_cigs", /datum/mood_event/wrong_brand)
 
+<<<<<<< HEAD
+=======
+/datum/quirk/alcoholic
+	name = "Alcoholic"
+	desc = "You can't stand being sober."
+	value = -1
+	gain_text = "<span class='danger'>You could really go for a drink right about now.</span>"
+	lose_text = "<span class='notice'>You feel like you should quit drinking.</span>"
+	medical_record_text = "Patient is an alcohol abuser."
+	var/where_drink //Where the bottle spawned
+	var/drink_types = list(/obj/item/reagent_containers/food/drinks/bottle/ale,
+					/obj/item/reagent_containers/food/drinks/bottle/beer,
+					/obj/item/reagent_containers/food/drinks/bottle/gin,
+		            /obj/item/reagent_containers/food/drinks/bottle/whiskey,
+					/obj/item/reagent_containers/food/drinks/bottle/vodka,
+					/obj/item/reagent_containers/food/drinks/bottle/rum,
+					/obj/item/reagent_containers/food/drinks/bottle/applejack)
+	var/need = 0 // How much they crave alcohol at the moment
+	var/tick_number = 0 // Keeping track of how many ticks have passed between a check
+	var/obj/item/reagent_containers/food/drinks/bottle/drink_instance
+
+/datum/quirk/alcoholic/on_spawn()
+	drink_instance = pick(drink_types)
+	drink_instance = new drink_instance()
+	var/list/slots = list("in your backpack" = ITEM_SLOT_BACKPACK)
+	var/mob/living/carbon/human/H = quirk_holder
+	where_drink = H.equip_in_one_of_slots(drink_instance, slots, FALSE) || "at your feet"
+
+/datum/quirk/alcoholic/post_add()
+	to_chat(quirk_holder, "<span class='boldnotice'>There is a small bottle of [drink_instance] [where_drink]. You only have a single bottle, might have to find some more...</span>")
+
+/datum/quirk/alcoholic/on_process()
+	if(tick_number >= 6) // how many ticks should pass between a check
+		tick_number = 0
+		var/mob/living/carbon/human/H = quirk_holder
+		if(H.drunkenness > 0) // If they're not drunk, need goes up. else they're satisfied
+			need = -15
+		else
+			need++
+
+		switch(need)
+			if(1 to 10)
+				SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "alcoholic", /datum/mood_event/withdrawal_light, "alcohol")
+				if(prob(5))
+					to_chat(H, "<span class='notice'>You could go for a drink right about now.</span>")
+			if(10 to 20)
+				SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "alcoholic", /datum/mood_event/withdrawal_medium, "alcohol")
+				if(prob(5))
+					to_chat(H, "<span class='notice'>You feel like you need alcohol. You just can't stand being sober.</span>")
+			if(20 to 30)
+				SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "alcoholic", /datum/mood_event/withdrawal_severe, "alcohol")
+				if(prob(5))
+					to_chat(H, "<span class='danger'>You have an intense craving for a drink.</span>")
+			if(30 to INFINITY)
+				SEND_SIGNAL(H, COMSIG_ADD_MOOD_EVENT, "alcoholic", /datum/mood_event/withdrawal_critical, "Alcohol")
+				if(prob(5))
+					to_chat(H, "<span class='boldannounce'>You're not feeling good at all! You really need some alcohol.</span>")
+			else
+				SEND_SIGNAL(H, COMSIG_CLEAR_MOOD_EVENT, "alcoholic")
+	tick_number++
+
+>>>>>>> upstream/master
 /datum/quirk/unstable
 	name = "Unstable"
 	desc = "Due to past troubles, you are unable to recover your sanity if you lose it. Be very careful managing your mood!"

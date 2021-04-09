@@ -214,8 +214,13 @@
 /obj/machinery/abductor/experiment/proc/SendBack(mob/living/carbon/human/H)
 	H.Sleeping(160)
 	H.uncuff()
+<<<<<<< HEAD
 	if(console?.pad?.teleport_target)
 		H.forceMove(console.pad.teleport_target)
+=======
+	if(console && console.pad && console.pad.teleport_target)
+		do_teleport(H, console.pad.teleport_target, channel = TELEPORT_CHANNEL_FREE, no_effects = TRUE, teleport_mode = TELEPORT_MODE_ABDUCTORS)
+>>>>>>> upstream/master
 		return
 	//Area not chosen / It's not safe area - teleport to arrivals
 	SSjob.SendToLateJoin(H, FALSE)

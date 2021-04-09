@@ -30,7 +30,11 @@
 #define ACCESS_CARGO 31
 #define ACCESS_CONSTRUCTION 32
 #define ACCESS_CHEMISTRY 33
+<<<<<<< HEAD
 #define ACCESS_BRIGPHYS 34 
+=======
+#define ACCESS_BRIGPHYS 34
+>>>>>>> upstream/master
 #define ACCESS_HYDROPONICS 35
 #define ACCESS_LIBRARY 37
 #define ACCESS_LAWYER 38
@@ -63,6 +67,7 @@
 #define ACCESS_WEAPONS 66 //! Weapon authorization for secbots
 #define ACCESS_NETWORK 67 //! NTnet diagnostics/monitoring software
 #define ACCESS_CLONING 68 //! Cloning room and clone pod ejection
+#define ACCESS_SEC_RECORDS 69 //! Update security records
 
 	//BEGIN CENTCOM ACCESS
 	/*Should leave plenty of room if we need to add more access levels.

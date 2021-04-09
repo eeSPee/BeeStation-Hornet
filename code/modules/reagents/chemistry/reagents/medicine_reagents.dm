@@ -235,9 +235,13 @@
 			M.adjustToxLoss(0.5*reac_volume)
 			if(show_message)
 				to_chat(M, "<span class='warning'>You don't feel so good...</span>")
+<<<<<<< HEAD
 		else if(M.reagents.has_reagent(/datum/reagent/medicine/silver_sulfadiazine, 40) && M.getFireLoss())
 			to_chat(M, "<span class='danger'>Silver sulfadiazine foams as it fails to heal your burns!</span>")
 		else if(M.getFireLoss())
+=======
+		else if(M.getFireLoss() && method == PATCH)
+>>>>>>> upstream/master
 			M.adjustFireLoss(-reac_volume)
 			if(show_message)
 				to_chat(M, "<span class='danger'>You feel your burns healing! It stings like hell!</span>")
@@ -293,9 +297,13 @@
 			M.adjustToxLoss(0.5*reac_volume)
 			if(show_message)
 				to_chat(M, "<span class='warning'>You don't feel so good...</span>")
+<<<<<<< HEAD
 		else if(M.reagents.has_reagent(/datum/reagent/medicine/styptic_powder, 40) && M.getBruteLoss())
 			to_chat(M, "<span class='danger'>Styptic powder foams as it fails to heal your bruises!</span>")
 		else if(M.getBruteLoss())
+=======
+		else if(M.getBruteLoss() && method == PATCH)
+>>>>>>> upstream/master
 			M.adjustBruteLoss(-reac_volume)
 			if(show_message)
 				to_chat(M, "<span class='danger'>You feel your bruises healing! It stings like hell!</span>")
@@ -411,8 +419,13 @@
 			if(show_message)
 				to_chat(M, "<span class='danger'>You feel your burns and bruises healing! It stings like hell!</span>")
 			SEND_SIGNAL(M, COMSIG_ADD_MOOD_EVENT, "painful_medicine", /datum/mood_event/painful_medicine)
+<<<<<<< HEAD
 			//Has to be at less than THRESHOLD_UNHUSK burn damage and have 100 isntabitaluri before unhusking. Corpses dont metabolize.
 			if(HAS_TRAIT_FROM(M, TRAIT_HUSK, "burn") && M.getFireLoss() < THRESHOLD_UNHUSK && M.reagents.has_reagent(/datum/reagent/medicine/synthflesh, 100))
+=======
+			//Has to be at less than THRESHOLD_UNHUSK burn damage and have at least 100 synthflesh (currently inside the body + amount now being applied). Corpses dont metabolize.
+			if(HAS_TRAIT_FROM(M, TRAIT_HUSK, "burn") && M.getFireLoss() < THRESHOLD_UNHUSK && (M.reagents.get_reagent_amount(/datum/reagent/medicine/synthflesh) + reac_volume) >= 100)
+>>>>>>> upstream/master
 				M.cure_husk("burn")
 				M.visible_message("<span class='nicegreen'>You successfully replace most of the burnt off flesh of [M].")
 	..()

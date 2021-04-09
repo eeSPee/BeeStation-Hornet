@@ -34,6 +34,10 @@
 			explosion(get_turf(P), 0, 0, 2)
 			// Only a level 1 explosion actually damages the machine
 			// at all
+<<<<<<< HEAD
 			P.ex_act(EXPLODE_DEVASTATE)
+=======
+			SSexplosions.high_mov_atom += P
+>>>>>>> upstream/master
 		else
 			P.emp_act(EMP_HEAVY)

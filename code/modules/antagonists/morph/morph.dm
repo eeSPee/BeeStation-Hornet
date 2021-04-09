@@ -193,7 +193,11 @@
 		if(A == src)
 			restore()
 			return
+<<<<<<< HEAD
 		if(istype(A) && allowed(A))
+=======
+		if(allowed(A))
+>>>>>>> upstream/master
 			assume(A)
 	else
 		to_chat(src, "<span class='warning'>Your chameleon skin is still repairing itself!</span>")
@@ -209,7 +213,8 @@
 	visible_message("<span class='warning'>[src] suddenly twists and changes shape, becoming a copy of [target]!</span>", \
 					"<span class='notice'>You twist your body and assume the form of [target].</span>")
 	appearance = target.appearance
-	copy_overlays(target)
+	if(length(target.vis_contents))
+		add_overlay(target.vis_contents)
 	alpha = max(alpha, 150)	//fucking chameleons
 	transform = initial(transform)
 	pixel_y = initial(pixel_y)
@@ -281,7 +286,11 @@
 	. = ..()
 	if(.)
 		var/list/things = list()
+<<<<<<< HEAD
 		for(var/atom/movable/A in view(src))
+=======
+		for(var/atom/A as() in view(src))
+>>>>>>> upstream/master
 			if(allowed(A))
 				things += A
 		var/atom/movable/T = pick(things)

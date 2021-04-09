@@ -37,13 +37,12 @@ GLOBAL_LIST_EMPTY(gear_datums)
 		LC.gear[use_name] = GLOB.gear_datums[use_name]
 
 	GLOB.loadout_categories = sortAssoc(GLOB.loadout_categories)
-	return 1
 
 /datum/gear
 	var/display_name       //Name/index. Must be unique.
 	var/description        //Description of this gear. If left blank will default to the description of the pathed item.
 	var/path               //Path to item.
-	var/cost = INFINITY           //Number of metacoins
+	var/cost = INFINITY    //Number of metacoins
 	var/slot               //Slot to equip to.
 	var/list/allowed_roles //Roles that can spawn with this item.
 	var/list/species_blacklist //Stop certain species from receiving this gear

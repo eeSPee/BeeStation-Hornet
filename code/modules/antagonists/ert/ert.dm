@@ -81,8 +81,16 @@
 /datum/antagonist/ert/medic/inquisitor
 	outfit = /datum/outfit/ert/medic/inquisitor
 
+/datum/antagonist/ert/medic/inquisitor/on_gain()
+	. = ..()
+	owner.holy_role = HOLY_ROLE_PRIEST
+
 /datum/antagonist/ert/security/inquisitor
 	outfit = /datum/outfit/ert/security/inquisitor
+
+/datum/antagonist/ert/security/inquisitor/on_gain()
+	. = ..()
+	owner.holy_role = HOLY_ROLE_PRIEST
 
 /datum/antagonist/ert/chaplain
 	role = "Chaplain"
@@ -93,14 +101,14 @@
 
 /datum/antagonist/ert/chaplain/on_gain()
 	. = ..()
-	owner.isholy = TRUE
+	owner.holy_role = HOLY_ROLE_PRIEST
 
 /datum/antagonist/ert/commander/inquisitor
 	outfit = /datum/outfit/ert/commander/inquisitor
 
 /datum/antagonist/ert/commander/inquisitor/on_gain()
 	. = ..()
-	owner.isholy = TRUE
+	owner.holy_role = HOLY_ROLE_PRIEST
 
 /datum/antagonist/ert/janitor
 	role = "Janitor"
@@ -155,6 +163,16 @@
 	if(!istype(H))
 		return
 	H.equipOutfit(outfit)
+<<<<<<< HEAD
+=======
+	//Set the suits frequency
+	var/obj/item/I = H.get_item_by_slot(ITEM_SLOT_OCLOTHING)
+	if(I)
+		var/datum/component/tracking_beacon/beacon = I.GetComponent(/datum/component/tracking_beacon)
+		if(beacon)
+			beacon.set_frequency(ert_team.ert_frequency)
+
+>>>>>>> upstream/master
 
 /datum/antagonist/ert/greet()
 	if(!ert_team)

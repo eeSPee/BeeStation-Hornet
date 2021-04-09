@@ -391,6 +391,14 @@
 	overlays_file = 'icons/obj/doors/airlocks/hatch/overlays.dmi'
 	note_overlay_file = 'icons/obj/doors/airlocks/hatch/overlays.dmi'
 	assemblytype = /obj/structure/door_assembly/door_assembly_hatch
+<<<<<<< HEAD
+=======
+	//anim_parts = "ul=-9,9;ur=9,9;dl=-9,-9;dr=9,-9"
+	anim_parts = "ul=-15,0,0,4,-90;ur=0,15,0,4,-90;dl=0,-15,0,4,-90;dr=15,0,0,4,-90"
+	note_attachment = "ul"
+	panel_attachment = "dr"
+	allow_repaint = FALSE
+>>>>>>> upstream/master
 
 /obj/machinery/door/airlock/maintenance_hatch
 	name = "maintenance hatch"
@@ -398,6 +406,14 @@
 	overlays_file = 'icons/obj/doors/airlocks/hatch/overlays.dmi'
 	note_overlay_file = 'icons/obj/doors/airlocks/hatch/overlays.dmi'
 	assemblytype = /obj/structure/door_assembly/door_assembly_mhatch
+<<<<<<< HEAD
+=======
+	//anim_parts = "ul=-9,9;ur=9,9;dl=-9,-9;dr=9,-9"
+	anim_parts = "ul=-15,0,0,4,-90;ur=0,15,0,4,-90;dl=0,-15,0,4,-90;dr=15,0,0,4,-90"
+	note_attachment = "ul"
+	panel_attachment = "dr"
+	allow_repaint = FALSE
+>>>>>>> upstream/master
 
 //////////////////////////////////
 /*
@@ -436,6 +452,10 @@
 	overlays_file = 'icons/obj/doors/airlocks/abductor/overlays.dmi'
 	assemblytype = /obj/structure/door_assembly/door_assembly_abductor
 	note_overlay_file = 'icons/obj/doors/airlocks/external/overlays.dmi'
+<<<<<<< HEAD
+=======
+	anim_parts="p1=0,40,0,5;p2=0,24,2,5;p3=0,-36,0.5,5;p4=0,16,3,5;p5=0,-40,0,5;p6=0,32,1,5;p7=0,-24,2,5" // the door has 7 fucking parts. SEVEN.
+>>>>>>> upstream/master
 	damage_deflection = 30
 	explosion_block = 3
 	hackProof = TRUE
@@ -552,7 +572,7 @@
 	desc = "An airlock hastily corrupted by blood magic, it is unusually brittle in this state."
 	normal_integrity = 150
 	damage_deflection = 5
-	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0)
+	armor = list("melee" = 0, "bullet" = 0, "laser" = 0,"energy" = 0, "bomb" = 0, "bio" = 0, "rad" = 0, "fire" = 0, "acid" = 0, "stamina" = 0)
 
 //////////////////////////////////
 /*

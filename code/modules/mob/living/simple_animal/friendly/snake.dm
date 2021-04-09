@@ -11,6 +11,7 @@
         return .
 
 /mob/living/simple_animal/hostile/retaliate/poison/snake
+<<<<<<< HEAD
         name = "snake"
         desc = "A slithery snake. These legless reptiles are the bane of mice and adventurers alike."
         icon_state = "snake"
@@ -36,6 +37,33 @@
         mobsay_color = "#26F55A"
         poison_per_bite = 3
         poison_type = /datum/reagent/toxin/venom
+=======
+	name = "snake"
+	desc = "A slithery snake. These legless reptiles are the bane of mice and adventurers alike."
+	icon_state = "snake"
+	icon_living = "snake"
+	icon_dead = "snake_dead"
+	speak_emote = list("hisses")
+	health = 20
+	maxHealth = 20
+	attacktext = "bites"
+	melee_damage = 6
+	response_help  = "pets"
+	response_disarm = "shoos"
+	response_harm   = "steps on"
+	faction = list("hostile")
+	ventcrawler = VENTCRAWLER_ALWAYS
+	density = FALSE
+	pass_flags = PASSTABLE | PASSMOB
+	mob_size = MOB_SIZE_SMALL
+	mob_biotypes = list(MOB_ORGANIC, MOB_BEAST, MOB_REPTILE)
+	gold_core_spawnable = FRIENDLY_SPAWN
+	obj_damage = 0
+	environment_smash = ENVIRONMENT_SMASH_NONE
+	chat_color = "#26F55A"
+	poison_per_bite = 3
+	poison_type = /datum/reagent/toxin/venom
+>>>>>>> upstream/master
 
 
 /mob/living/simple_animal/hostile/retaliate/poison/snake/ListTargets(atom/the_target)

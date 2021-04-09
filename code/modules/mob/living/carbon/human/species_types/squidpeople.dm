@@ -1,4 +1,5 @@
 /datum/species/squid
+<<<<<<< HEAD
     name = "Squidperson"
     id = "squid"
     default_color = "b8dfda"
@@ -21,6 +22,31 @@
     skinned_type = /obj/item/stack/sheet/animalhide/human
     toxic_food = FRIED
     species_language_holder = /datum/language_holder/squid
+=======
+	name = "Squidperson"
+	id = "squid"
+	default_color = "b8dfda"
+	species_traits = list(MUTCOLORS,EYECOLOR,TRAIT_EASYDISMEMBER)
+	inherent_traits = list(TRAIT_NOSLIPALL)
+	default_features = list("mcolor" = "FFF") // bald
+	speedmod = 0.5
+	burnmod = 1.5
+	heatmod = 1.4
+	coldmod = 1.5
+	punchdamage = 7 // Lower max damage in melee. It's just a tentacle
+	changesource_flags = MIRROR_BADMIN | WABBAJACK | MIRROR_PRIDE | MIRROR_MAGIC | RACE_SWAP | SLIME_EXTRACT
+	attack_verb = "lash"
+	attack_sound = 'sound/weapons/whip.ogg'
+	miss_sound = 'sound/weapons/etherealmiss.ogg'
+	grab_sound = 'sound/weapons/whipgrab.ogg'
+	deathsound = 'sound/voice/hiss1.ogg'
+	use_skintones = 0
+	no_equip = list(ITEM_SLOT_FEET)
+	skinned_type = /obj/item/stack/sheet/animalhide/human
+	toxic_food = FRIED
+	species_language_holder = /datum/language_holder/squid
+	swimming_component = /datum/component/swimming/squid
+>>>>>>> upstream/master
 
 /mob/living/carbon/human/species/squid
     race = /datum/species/squid

@@ -187,6 +187,7 @@
 /obj/item/storage/fancy/cigarettes/attack(mob/living/carbon/M as mob, mob/living/carbon/user as mob)
 	if(!ismob(M))
 		return
+<<<<<<< HEAD
 	var/obj/item/clothing/mask/cigarette/cig = locate(/obj/item/clothing/mask/cigarette) in contents
 	if(cig)
 		if(M == user && contents.len > 0 && !user.wear_mask)
@@ -199,6 +200,17 @@
 			..()
 	else
 		to_chat(user, "<span class='notice'>There are no [icon_type]s left in the pack.</span>")
+=======
+
+	var/obj/item/clothing/mask/cigarette/W = locate(/obj/item/clothing/mask/cigarette) in contents
+	if(!W)
+		return ..()
+	if(M == user && contents.len > 0 && !user.wear_mask)
+		SEND_SIGNAL(src, COMSIG_TRY_STORAGE_TAKE, W, M)
+		M.equip_to_slot_if_possible(W, ITEM_SLOT_MASK)
+		contents -= W
+		to_chat(user, "<span class='notice'>You take \a [W] out of the pack.</span>")
+>>>>>>> upstream/master
 
 /obj/item/storage/fancy/cigarettes/dromedaryco
 	name = "\improper DromedaryCo packet"

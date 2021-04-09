@@ -23,7 +23,12 @@
 
 	attacktext = "slices"
 	attack_sound = 'sound/weapons/bladeslice.ogg'
+<<<<<<< HEAD
 	mobsay_color = "#CAA25B"
+=======
+	chat_color = "#CAA25B"
+	mobchatspan = "brassmobsay"
+>>>>>>> upstream/master
 	obj_damage = 80
 	melee_damage = 24
 	faction = list("ratvar")

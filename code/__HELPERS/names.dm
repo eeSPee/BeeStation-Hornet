@@ -25,7 +25,14 @@
 /proc/moth_name()
 	return "[pick(GLOB.moth_first)] [pick(GLOB.moth_last)]"
 
+<<<<<<< HEAD
 proc/squid_name(gender)
+=======
+/proc/ooze_name()
+	return "[pick(GLOB.oozeling_first_names)] [pick(GLOB.oozeling_last_names)]"
+
+/proc/squid_name(gender)
+>>>>>>> upstream/master
 	if(gender == MALE)
 		return "[pick(GLOB.squid_names_male)] [pick(GLOB.last_names)]"
 	else

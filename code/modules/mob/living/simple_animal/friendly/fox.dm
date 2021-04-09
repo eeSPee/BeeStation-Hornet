@@ -18,7 +18,12 @@
 	response_disarm = "gently pushes aside"
 	response_harm = "kicks"
 	gold_core_spawnable = FRIENDLY_SPAWN
+<<<<<<< HEAD
 	mobsay_color = "#FFAE64"
+=======
+	chat_color = "#FFAE64"
+	mobchatspan = "fox"
+>>>>>>> upstream/master
 	can_be_held = TRUE
 	held_state = "fox"
 	do_footstep = TRUE

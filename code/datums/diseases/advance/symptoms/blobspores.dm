@@ -60,6 +60,8 @@
 
 
 /datum/symptom/blobspores/OnDeath(datum/disease/advance/A)
+	if(neutered) //Stops this symptom from making people scared even if this is useless
+		return FALSE
 	var/mob/living/M = A.affected_mob
 	M.visible_message("<span class='danger'>[M] starts swelling grotesquely!</span>")
 	sleep(10 SECONDS)

@@ -71,7 +71,7 @@
 	var/obj/machinery/door/airlock/closeOther
 	var/justzap = FALSE
 	var/obj/item/electronics/airlock/electronics
-	var/shockCooldown = FALSE //Prevents multiple shocks from happening
+	COOLDOWN_DECLARE(shockCooldown) //Prevents multiple shocks from happening
 	var/obj/item/doorCharge/charge //If applied, causes an explosion upon opening the door
 	var/obj/item/note //Any papers pinned to the airlock
 	var/detonated = FALSE
@@ -86,6 +86,16 @@
 	var/airlock_material //material of inner filling; if its an airlock with glass, this should be set to "glass"
 	var/overlays_file = 'icons/obj/doors/airlocks/station/overlays.dmi'
 	var/note_overlay_file = 'icons/obj/doors/airlocks/station/overlays.dmi' //Used for papers and photos pinned to the airlock
+<<<<<<< HEAD
+=======
+	var/mask_file = 'icons/obj/doors/airlocks/mask_32x32.dmi' // because filters aren't allowed to have icon_states :(
+	var/mask_x = 0
+	var/mask_y = 0
+	var/anim_parts = "left=-14,0;right=13,0" //format is "airlock_part=open_px,open_py,move_start_time,move_end_time,aperture_angle"
+	var/list/part_overlays
+	var/panel_attachment = "right"
+	var/note_attachment = "left"
+>>>>>>> upstream/master
 
 	var/cyclelinkeddir = 0
 	var/obj/machinery/door/airlock/cyclelinkedairlock
@@ -156,6 +166,38 @@
 	. = ..()
 	AddComponent(/datum/component/ntnet_interface)
 
+<<<<<<< HEAD
+=======
+/obj/machinery/door/airlock/proc/rebuild_parts()
+	if(part_overlays)
+		vis_contents -= part_overlays
+		QDEL_LIST(part_overlays)
+	else
+		part_overlays = list()
+	var/list/parts_desc = params2list(anim_parts)
+	var/list/door_time = list()
+	for(var/part_id in parts_desc)
+		var/obj/effect/overlay/airlock_part/P = new
+		P.side_id = part_id
+		var/list/open_offset = splittext(parts_desc[part_id], ",")
+		P.open_px = text2num(open_offset[1])
+		P.open_py = text2num(open_offset[2])
+		if(open_offset.len >= 3)
+			P.move_start_time = text2num(open_offset[3])
+		if(open_offset.len >= 4)
+			P.move_end_time = text2num(open_offset[4])
+		if(open_offset.len >= 5)
+			P.aperture_angle = text2num(open_offset[5])
+		vis_contents += P
+		part_overlays += P
+		P.icon = icon
+		P.icon_state = part_id
+		P.name = name
+		door_time += P.move_end_time
+	open_speed = max(door_time) //open_speed is max animation time
+	add_filter("mask_filter", 1, list(type="alpha",icon=mask_file,x=mask_x,y=mask_y))
+
+>>>>>>> upstream/master
 /obj/machinery/door/airlock/proc/update_other_id()
 	for(var/obj/machinery/door/airlock/A in GLOB.airlocks)
 		if(A.closeOtherId == closeOtherId && A != src)
@@ -459,14 +501,14 @@
 /obj/machinery/door/airlock/proc/shock(mob/user, prb)
 	if(!hasPower())		// unpowered, no shock
 		return FALSE
-	if(shockCooldown > world.time)
+	if(!COOLDOWN_FINISHED(src, shockCooldown))
 		return FALSE	//Already shocked someone recently?
 	if(!prob(prb))
 		return FALSE //you lucked out, no shock for you
 	do_sparks(5, TRUE, src)
 	var/check_range = TRUE
 	if(electrocute_mob(user, get_area(src), src, 1, check_range))
-		shockCooldown = world.time + 10
+		COOLDOWN_START(src, shockCooldown, 1 SECONDS)
 		return TRUE
 	else
 		return FALSE
@@ -488,6 +530,7 @@
 	set_airlock_overlays(state)
 
 /obj/machinery/door/airlock/proc/set_airlock_overlays(state)
+<<<<<<< HEAD
 	var/mutable_appearance/frame_overlay
 	var/mutable_appearance/filling_overlay
 	var/mutable_appearance/lights_overlay
@@ -497,6 +540,52 @@
 	var/mutable_appearance/sparks_overlay
 	var/mutable_appearance/note_overlay
 	var/notetype = note_type()
+=======
+	for(var/obj/effect/overlay/airlock_part/part as() in part_overlays)
+		set_side_overlays(part, state == AIRLOCK_CLOSING || state == AIRLOCK_OPENING)
+		if(part.aperture_angle)
+			var/matrix/T
+			if(state == AIRLOCK_OPEN || state == AIRLOCK_OPENING || state == AIRLOCK_CLOSING)
+				T = matrix()
+				T.Translate(-part.open_px,-part.open_py)
+				T.Turn(part.aperture_angle)
+				T.Translate(part.open_px,part.open_py)
+			switch(state)
+				if(AIRLOCK_CLOSED, AIRLOCK_DENY, AIRLOCK_EMAG)
+					part.transform = matrix()
+				if(AIRLOCK_OPEN)
+					part.transform = T
+				if(AIRLOCK_CLOSING)
+					part.transform = T
+					animate(part, transform = T, time = open_speed - part.move_end_time, flags = ANIMATION_LINEAR_TRANSFORM)
+					animate(transform = matrix(), time = part.move_end_time - part.move_start_time, flags = ANIMATION_LINEAR_TRANSFORM)
+				if(AIRLOCK_OPENING)
+					part.transform = matrix()
+					animate(part, transform = matrix(), time = part.move_start_time, flags = ANIMATION_LINEAR_TRANSFORM)
+					animate(transform = T, time = part.move_end_time - part.move_start_time, flags = ANIMATION_LINEAR_TRANSFORM)
+		else
+			switch(state)
+				if(AIRLOCK_CLOSED, AIRLOCK_DENY, AIRLOCK_EMAG)
+					part.pixel_x = 0
+					part.pixel_y = 0
+				if(AIRLOCK_OPEN)
+					part.pixel_x = part.open_px
+					part.pixel_y = part.open_py
+				if(AIRLOCK_CLOSING)
+					part.pixel_x = part.open_px
+					part.pixel_y = part.open_py
+					animate(part, pixel_x = part.open_px, pixel_y = part.open_py, time = open_speed - part.move_end_time)
+					animate(pixel_x = 0, pixel_y = 0, time = part.move_end_time - part.move_start_time)
+				if(AIRLOCK_OPENING)
+					part.pixel_x = 0
+					part.pixel_y = 0
+					animate(part, pixel_x = 0, pixel_y = 0, time = part.move_start_time)
+					animate(pixel_x = part.open_px, pixel_y = part.open_py, time = part.move_end_time - part.move_start_time)
+
+	SSvis_overlays.remove_vis_overlay(src, managed_vis_overlays)
+
+	SSvis_overlays.add_vis_overlay(src, overlays_file, "frame", FLOAT_LAYER, FLOAT_PLANE, dir)
+>>>>>>> upstream/master
 
 	switch(state)
 		if(AIRLOCK_CLOSED)
@@ -1165,7 +1254,11 @@
 	sleep(1)
 	set_opacity(0)
 	update_freelook_sight()
+<<<<<<< HEAD
 	sleep(4)
+=======
+	sleep(open_speed - 1)
+>>>>>>> upstream/master
 	density = FALSE
 	air_update_turf(1)
 	sleep(1)
@@ -1203,7 +1296,11 @@
 
 	var/obj/structure/window/killthis = (locate(/obj/structure/window) in get_turf(src))
 	if(killthis)
+<<<<<<< HEAD
 		killthis.ex_act(EXPLODE_HEAVY)//Smashin windows
+=======
+		SSexplosions.med_mov_atom += killthis
+>>>>>>> upstream/master
 
 	operating = TRUE
 	update_icon(AIRLOCK_CLOSING, 1)
@@ -1215,7 +1312,11 @@
 	if(!air_tight)
 		density = TRUE
 		air_update_turf(1)
+<<<<<<< HEAD
 	sleep(4)
+=======
+	sleep(open_speed - 1)
+>>>>>>> upstream/master
 	if(!safe)
 		crush()
 	if(visible && !glass)

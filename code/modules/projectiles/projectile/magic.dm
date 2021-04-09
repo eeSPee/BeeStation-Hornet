@@ -6,10 +6,12 @@
 	nodamage = TRUE
 	armour_penetration = 100
 	flag = "magic"
+	martial_arts_no_deflect = TRUE
 
 /obj/item/projectile/magic/death
 	name = "bolt of death"
 	icon_state = "pulse1_bl"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/death/on_hit(target)
 	. = ..()
@@ -26,6 +28,7 @@
 	damage = 0
 	damage_type = OXY
 	nodamage = TRUE
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/resurrection/on_hit(mob/living/carbon/target)
 	. = ..()
@@ -51,6 +54,7 @@
 	damage = 0
 	damage_type = OXY
 	nodamage = TRUE
+	martial_arts_no_deflect = FALSE
 	var/inner_tele_radius = 0
 	var/outer_tele_radius = 6
 
@@ -79,6 +83,7 @@
 	damage = 0
 	damage_type = OXY
 	nodamage = TRUE
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/safety/on_hit(atom/target)
 	. = ..()
@@ -134,6 +139,7 @@
 	damage = 0
 	damage_type = BURN
 	nodamage = TRUE
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/change/on_hit(atom/change)
 	. = ..()
@@ -340,6 +346,7 @@
 	flag = "magic"
 	dismemberment = 50
 	nodamage = FALSE
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/spellblade/on_hit(target)
 	if(ismob(target))
@@ -359,6 +366,7 @@
 	armour_penetration = 0
 	flag = "magic"
 	hitsound = 'sound/weapons/barragespellhit.ogg'
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/arcane_barrage/on_hit(target)
 	if(ismob(target))
@@ -375,6 +383,10 @@
 	icon_state = "locker"
 	nodamage = TRUE
 	flag = "magic"
+<<<<<<< HEAD
+=======
+	martial_arts_no_deflect = FALSE
+>>>>>>> upstream/master
 	var/weld = TRUE
 	var/created = FALSE //prevents creation of more then one locker if it has multiple hits
 	var/locker_suck = TRUE
@@ -459,6 +471,7 @@
 /obj/item/projectile/magic/flying
 	name = "bolt of flying"
 	icon_state = "flight"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/flying/on_hit(target)
 	. = ..()
@@ -473,6 +486,7 @@
 /obj/item/projectile/magic/bounty
 	name = "bolt of bounty"
 	icon_state = "bounty"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/bounty/on_hit(target)
 	. = ..()
@@ -486,6 +500,7 @@
 /obj/item/projectile/magic/antimagic
 	name = "bolt of antimagic"
 	icon_state = "antimagic"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/antimagic/on_hit(target)
 	. = ..()
@@ -499,6 +514,7 @@
 /obj/item/projectile/magic/fetch
 	name = "bolt of fetching"
 	icon_state = "fetch"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/fetch/on_hit(target)
 	. = ..()
@@ -513,6 +529,7 @@
 /obj/item/projectile/magic/sapping
 	name = "bolt of sapping"
 	icon_state = "sapping"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/sapping/on_hit(target)
 	. = ..()
@@ -526,6 +543,7 @@
 /obj/item/projectile/magic/necropotence
 	name = "bolt of necropotence"
 	icon_state = "necropotence"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/necropotence/on_hit(target)
 	. = ..()
@@ -548,12 +566,13 @@
 /obj/item/projectile/magic/wipe
 	name = "bolt of possession"
 	icon_state = "wipe"
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/wipe/on_hit(target)
 	. = ..()
 	if(iscarbon(target))
 		var/mob/living/carbon/M = target
-		if(M.anti_magic_check() || istype(M.get_item_by_slot(SLOT_HEAD), /obj/item/clothing/head/foilhat))
+		if(M.anti_magic_check() || istype(M.get_item_by_slot(ITEM_SLOT_HEAD), /obj/item/clothing/head/foilhat))
 			M.visible_message("<span class='warning'>[src] vanishes on contact with [target]!</span>")
 			return BULLET_ACT_BLOCK
 		for(var/x in M.get_traumas())//checks to see if the victim is already going through possession
@@ -597,6 +616,7 @@
 	desc = "What the fuck does this do?!"
 	damage = 0
 	var/proxdet = TRUE
+	martial_arts_no_deflect = FALSE
 
 /obj/item/projectile/magic/aoe/Range()
 	if(proxdet)

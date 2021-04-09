@@ -157,7 +157,7 @@ GLOBAL_VAR(clockcult_eminence)
 		return FALSE
 	if(ishuman(M) && (M.mind.assigned_role in list("Captain", "Chaplain")))
 		return FALSE
-	if(istype(M.get_item_by_slot(SLOT_HEAD), /obj/item/clothing/head/foilhat))
+	if(istype(M.get_item_by_slot(ITEM_SLOT_HEAD), /obj/item/clothing/head/foilhat))
 		return FALSE
 	if(is_servant_of_ratvar(M))
 		return FALSE
@@ -205,6 +205,7 @@ GLOBAL_VAR(clockcult_eminence)
 		msg = sender.treat_message(msg)
 		var/datum/antagonist/servant_of_ratvar/SoR = is_servant_of_ratvar(sender)
 		var/prefix = "Clockbrother"
+<<<<<<< HEAD
 		if(SoR.prefix)
 			prefix = sender.gender == MALE\
 				? "Clockfather"\
@@ -237,6 +238,44 @@ GLOBAL_VAR(clockcult_eminence)
 				prefix = "Warrior"
 			else if(role in GLOB.nonhuman_positions)
 				prefix = "CPU"
+=======
+		switch(SoR.prefix)
+			if(CLOCKCULT_PREFIX_EMINENCE)
+				prefix = "Master"
+			if(CLOCKCULT_PREFIX_MASTER)
+				prefix = sender.gender == MALE\
+					? "Clockfather"\
+					: sender.gender == FEMALE\
+						? "Clockmother"\
+						: "Clockmaster"
+				hierophant_message = "<span class='leader_brass'>"
+			if(CLOCKCULT_PREFIX_RECRUIT)
+				var/role = sender.mind?.assigned_role
+				//Ew, this could be done better with a dictionary list, but this isn't much slower
+				if(role in GLOB.command_positions)
+					prefix = "High Priest"
+				else if(role in GLOB.engineering_positions)
+					prefix = "Cogturner"
+				else if(role in GLOB.medical_positions)
+					prefix = "Rejuvinator"
+				else if(role in GLOB.science_positions)
+					prefix = "Calculator"
+				else if(role in GLOB.supply_positions)
+					prefix = "Pathfinder"
+				else if(role in "Assistant")
+					prefix = "Helper"
+				else if(role in "Mime")
+					prefix = "Cogwatcher"
+				else if(role in "Clown")
+					prefix = "Clonker"
+				else if((role in GLOB.civilian_positions) || (role in GLOB.gimmick_positions))
+					prefix = "Cogworker"
+				else if(role in GLOB.security_positions)
+					prefix = "Warrior"
+				else if(role in GLOB.nonhuman_positions)
+					prefix = "CPU"
+			//Fallthrough is default of "Clockbrother"
+>>>>>>> upstream/master
 		hierophant_message += "<b>[prefix] [sender.name]</b> transmits, \"[msg]\""
 	else
 		hierophant_message += msg

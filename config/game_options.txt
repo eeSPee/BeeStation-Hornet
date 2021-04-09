@@ -85,6 +85,12 @@ ALERT_DELTA Destruction of the station is imminent. All crew are instructed to o
 
 ## GAME MODES ###
 
+<<<<<<< HEAD
+=======
+#Set the Master (Default) Game Mode.
+MASTER_MODE secret_extended
+
+>>>>>>> upstream/master
 ## Uncomment to not send a roundstart intercept report. Gamemodes may override this.
 #NO_INTERCEPT_REPORT
 
@@ -92,9 +98,9 @@ ALERT_DELTA Destruction of the station is imminent. All crew are instructed to o
 ## Default probablity is 1, increase to make that mode more likely to be picked.
 ## Set to 0 to disable that mode.
 
-PROBABILITY TRAITOR 9
+PROBABILITY DYNAMIC 9
+PROBABILITY TRAITOR 8
 PROBABILITY CULT 6
-PROBABILITY DYNAMIC 6
 PROBABILITY HERESY 6
 PROBABILITY NUCLEAR 6
 PROBABILITY TRAITORCHAN 5
@@ -109,10 +115,12 @@ PROBABILITY MONKEY 1
 PROBABILITY CLOCKCULT 1
 PROBABILITY GANG 0
 PROBABILITY METEOR 0
-PROBABILITY EXTENDED 0
 PROBABILITY SECRET_EXTENDED 0
 PROBABILITY DEVIL 0
 PROBABILITY DEVIL_AGENTS 0
+
+## Creates issues when NO_INTERCEPT_REPORT is enabled
+PROBABILITY EXTENDED 0
 
 ## You probably want to keep sandbox off by default for secret and random.
 PROBABILITY SANDBOX 0
@@ -249,7 +257,7 @@ PROTECT_ROLES_FROM_ANTAGONIST
 #PROTECT_ASSISTANT_FROM_ANTAGONIST
 
 ## Uncomment to prohibit head roles from becoming most antagonists.
-#PROTECT_HEADS_FROM_ANTAGONIST
+PROTECT_HEADS_FROM_ANTAGONIST
 
 ## If non-human species are barred from joining as a head of staff
 #ENFORCE_HUMAN_AUTHORITY
@@ -579,7 +587,7 @@ MICE_ROUNDSTART 10
 #EMERGENCY_SHUTTLE_AUTOCALL_THRESHOLD 0.2
 
 ## Determines if players are allowed to print integrated circuits, uncomment to allow.
-IC_PRINTING
+@IC_PRINTING 0
 
 ## Uncomment to allow roundstart quirk selection in the character setup menu.
 ## This used to be named traits, hence the config name, but it handles quirks, not the other kind of trait!
@@ -613,3 +621,20 @@ MAX_SLIMES 100
 
 ## Uncomment to restrict suiciding. Adds an additional confirmation dialogue, additional logging, and prevents suicide within the first 15 minutes of the round.
 #RESTRICTED_SUICIDE
+<<<<<<< HEAD
+=======
+
+## Uncomment to enable donator items in the cosmetic shop. Only works if a patreon list has been setup
+DONATOR_ITEMS
+
+## Bluespace Miners.
+
+## Amount of miner boards in the RD's locker at roundstart.
+ROUNDSTART_BLUESPACE_MINERS 2
+
+## Enable the bluespace miner research node?
+#BSMINER_RESEARCHABLE
+
+## Do we want all the heads to get codes to spare safe, or just one highest in CoC?
+#SPARE_ENFORCE_COC
+>>>>>>> upstream/master

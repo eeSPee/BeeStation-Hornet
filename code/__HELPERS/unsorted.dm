@@ -1166,7 +1166,7 @@ eg2: `center_image(I, 96,96)`
 	return closest_atom
 
 
-proc/pick_closest_path(value, list/matches = get_fancy_list_of_atom_types())
+/proc/pick_closest_path(value, list/matches = get_fancy_list_of_atom_types())
 	if (value == FALSE) //nothing should be calling us with a number, so this is safe
 		value = input("Enter type to find (blank for all, cancel to cancel)", "Search for type") as null|text
 		if (isnull(value))
@@ -1602,3 +1602,59 @@ config_setting should be one of the following:
 /proc/get_final_z(atom/A)
 	var/turf/T = get_turf(A)
 	return T ? T.z : A.z
+<<<<<<< HEAD
+=======
+
+/proc/invertDir(var/input_dir)
+	switch(input_dir)
+		if(UP)
+			return DOWN
+		if(DOWN)
+			return UP
+		if(-INFINITY to 0, 11 to INFINITY)
+			CRASH("Can't turn invalid directions!")
+	return turn(input_dir, 180)
+
+/**
+ * Sends a topic call to crosscomms servers.
+ *
+ * Params:
+ * sender - Name of the IC entity sending the message
+ * msg - Message text to send
+ * type - What handler the recieving server should use
+ * insecure - Send the messages to insecure servers
+*/
+/proc/comms_send(sender, msg, type, insecure = FALSE)
+	var/list/message = list()
+	message["message_sender"] = sender
+	message["message"] = msg
+	message["source"] = "([CONFIG_GET(string/cross_comms_name)])"
+	message += type
+
+	var/comms_key = CONFIG_GET(string/comms_key)
+	if(comms_key)
+		message["key"] = comms_key
+		var/list/servers = CONFIG_GET(keyed_list/cross_server)
+		for(var/I in servers)
+			world.Export("[servers[I]]?[list2params(message)]")
+
+	comms_key = CONFIG_GET(string/comms_key_insecure)
+	if(comms_key && insecure)
+		message["key"] = comms_key
+		var/list/servers = CONFIG_GET(keyed_list/insecure_cross_server)
+		for(var/I in servers)
+			world.Export("[servers[I]]?[list2params(message)]")
+
+/proc/drop_shadow_filter(x, y, size, offset, color)
+	. = list("type" = "drop_shadow")
+	if(!isnull(x))
+		.["x"] = x
+	if(!isnull(y))
+		.["y"] = y
+	if(!isnull(size))
+		.["size"] = size
+	if(!isnull(offset))
+		.["offset"] = offset
+	if(!isnull(color))
+		.["color"] = color
+>>>>>>> upstream/master

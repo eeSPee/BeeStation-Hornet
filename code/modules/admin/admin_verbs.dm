@@ -30,6 +30,7 @@ GLOBAL_PROTECT(admin_verbs_admin)
 	/datum/verbs/menu/Admin/verb/playerpanel,
 	/client/proc/game_panel,			/*game panel, allows to change game-mode etc*/
 	/client/proc/check_ai_laws,			/*shows AI and borg laws*/
+	/client/proc/ghost_pool_protection,	/*opens a menu for toggling ghost roles*/
 	/datum/admins/proc/toggleooc,		/*toggles ooc on/off for everyone*/
 	/datum/admins/proc/toggleoocdead,	/*toggles ooc on/off for everyone who is dead*/
 	/datum/admins/proc/toggleenter,		/*toggles whether people can join the current game*/
@@ -176,6 +177,17 @@ GLOBAL_PROTECT(admin_verbs_debug)
 	/client/proc/cmd_display_overlay_log,
 	/client/proc/reload_configuration,
 	/datum/admins/proc/create_or_modify_area,
+<<<<<<< HEAD
+=======
+	#ifdef TESTING
+	/client/proc/export_dynamic_json,
+	/client/proc/run_dynamic_simulations,
+	#endif
+	#ifdef REFERENCE_TRACKING
+	/datum/admins/proc/view_refs,
+	/datum/admins/proc/view_del_failures,
+	#endif
+>>>>>>> upstream/master
 	/client/proc/toggle_cdn
 	)
 

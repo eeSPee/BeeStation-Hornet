@@ -389,4 +389,9 @@
 		icon_state = "surgicaldrill_a"
 
 /obj/item/surgicaldrill/advanced/examine()
+<<<<<<< HEAD
 	. += " It's set to [tool_behaviour == TOOL_DRILL ? "drilling" : "mending"] mode."
+=======
+	. = ..()
+	. += " It's set to [tool_behaviour == TOOL_DRILL ? "drilling" : "mending"] mode."
+>>>>>>> upstream/master

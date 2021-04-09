@@ -295,3 +295,113 @@
 	required_atoms = list(/obj/item/organ/eyes,/obj/item/stack/sheet/animalhide/human,/obj/item/storage/book/bible,/obj/item/pen)
 	result_atoms = list(/obj/item/forbidden_book)
 	route = "Start"
+<<<<<<< HEAD
+=======
+	
+//	---	CRAFTING ---
+
+/datum/eldritch_knowledge/ashen_eyes
+	name = "Ashen Eyes"
+	gain_text = "Piercing eyes, guide me through the mundane."
+	desc = "Allows you to craft thermal vision amulet by transmutating eyes with a glass shard."
+	cost = 1
+	next_knowledge = list(/datum/eldritch_knowledge/spell/ashen_shift,/datum/eldritch_knowledge/flesh_ghoul)
+	required_atoms = list(/obj/item/organ/eyes,/obj/item/shard)
+	result_atoms = list(/obj/item/clothing/neck/eldritch_amulet)
+
+/datum/eldritch_knowledge/armor
+	name = "Armorer's ritual"
+	desc = "You can now create eldritch armor using a table and a gas mask."
+	gain_text = "For I am the heir to the throne of doom."
+	cost = 1
+	next_knowledge = list(/datum/eldritch_knowledge/rust_regen,/datum/eldritch_knowledge/flesh_ghoul)
+	required_atoms = list(/obj/structure/table,/obj/item/clothing/mask/gas)
+	result_atoms = list(/obj/item/clothing/suit/hooded/cultrobes/eldritch)
+
+/datum/eldritch_knowledge/essence
+	name = "Priest's Ritual"
+	desc = "You can now transmute a tank of water and a glass shard into a bottle of eldritch water."
+	gain_text = "This is an old recipe. The Owl whispered it to me."
+	cost = 1
+	next_knowledge = list(/datum/eldritch_knowledge/rust_regen,/datum/eldritch_knowledge/spell/ashen_shift)
+	required_atoms = list(/obj/structure/reagent_dispensers/watertank)
+	result_atoms = list(/obj/item/reagent_containers/glass/beaker/eldritch)
+
+//	---	CURSES ---
+
+/datum/eldritch_knowledge/curse/corrosion
+	name = "Curse of Corrosion"
+	gain_text = "Cursed land, cursed man, cursed mind."
+	desc = "Curse someone for 2 minutes of vomiting and major organ damage. Using a wirecutter, a heart, and an item that the victim touched  with their bare hands."
+	cost = 1
+	required_atoms = list(/obj/item/wirecutters,/obj/item/organ/heart)
+	next_knowledge = list(/datum/eldritch_knowledge/mad_mask,/datum/eldritch_knowledge/spell/area_conversion)
+	timer = 2 MINUTES
+
+/datum/eldritch_knowledge/curse/corrosion/curse(mob/living/chosen_mob)
+	. = ..()
+	chosen_mob.apply_status_effect(/datum/status_effect/corrosion_curse)
+
+/datum/eldritch_knowledge/curse/corrosion/uncurse(mob/living/chosen_mob)
+	. = ..()
+	chosen_mob.remove_status_effect(/datum/status_effect/corrosion_curse)
+
+/datum/eldritch_knowledge/curse/paralysis
+	name = "Curse of Paralysis"
+	gain_text = "Corrupt their flesh, make them bleed."
+	desc = "Curse someone for 5 minutes of inability to walk. Using a left leg, right leg, a hatchet and an item that the victim touched  with their bare hands. "
+	cost = 1
+	required_atoms = list(/obj/item/bodypart/l_leg,/obj/item/bodypart/r_leg,/obj/item/hatchet)
+	next_knowledge = list(/datum/eldritch_knowledge/mad_mask,/datum/eldritch_knowledge/summon/raw_prophet)
+	timer = 5 MINUTES
+
+/datum/eldritch_knowledge/curse/paralysis/curse(mob/living/chosen_mob)
+	. = ..()
+	ADD_TRAIT(chosen_mob,TRAIT_PARALYSIS_L_LEG,MAGIC_TRAIT)
+	ADD_TRAIT(chosen_mob,TRAIT_PARALYSIS_R_LEG,MAGIC_TRAIT)
+	chosen_mob.update_mobility()
+
+/datum/eldritch_knowledge/curse/paralysis/uncurse(mob/living/chosen_mob)
+	. = ..()
+	REMOVE_TRAIT(chosen_mob,TRAIT_PARALYSIS_L_LEG,MAGIC_TRAIT)
+	REMOVE_TRAIT(chosen_mob,TRAIT_PARALYSIS_R_LEG,MAGIC_TRAIT)
+	chosen_mob.update_mobility()
+	
+//	--- SPELLS ---
+
+/datum/eldritch_knowledge/spell/cleave
+	name = "Blood Cleave"
+	gain_text = "At first I didn't understand these instruments of war, but the priest told me to use them regardless. Soon, he said, I would know them well."
+	desc = "Gives AOE spell that causes heavy bleeding and blood loss."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/pointed/cleave
+	next_knowledge = list(/datum/eldritch_knowledge/spell/rust_wave,/datum/eldritch_knowledge/spell/flame_birth)
+
+/datum/eldritch_knowledge/spell/blood_siphon
+	name = "Blood Siphon"
+	gain_text = "No matter the man, we bleed all the same. That's what the Marshal told me."
+	desc = "You gain a spell that drains health from your enemies to restores your own."
+	cost = 1
+	spell_to_add = /obj/effect/proc_holder/spell/targeted/touch/blood_siphon
+	next_knowledge = list(/datum/eldritch_knowledge/summon/raw_prophet,/datum/eldritch_knowledge/spell/area_conversion)
+	
+//	--- SUMMONS ---
+
+/datum/eldritch_knowledge/summon/ashy
+	name = "Ashen Ritual"
+	gain_text = "I combined my principle of hunger with my desire for destruction. And the Nightwatcher knew my name."
+	desc = "You can now summon an Ash Man by transmutating a pile of ash, a head and a book."
+	cost = 1
+	required_atoms = list(/obj/effect/decal/cleanable/ash,/obj/item/bodypart/head,/obj/item/book)
+	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/ash_spirit
+	next_knowledge = list(/datum/eldritch_knowledge/summon/stalker,/datum/eldritch_knowledge/spell/rust_wave)
+
+/datum/eldritch_knowledge/summon/rusty
+	name = "Rusted Ritual"
+	gain_text = "I combined my principle of hunger with my desire for corruption. And the Rusted Hills called my name."
+	desc = "You can now summon a Rust Walker by transmutating a vomit pool, a severed head and a book."
+	cost = 1
+	required_atoms = list(/obj/effect/decal/cleanable/vomit,/obj/item/bodypart/head,/obj/item/book)
+	mob_to_summon = /mob/living/simple_animal/hostile/eldritch/rust_spirit
+	next_knowledge = list(/datum/eldritch_knowledge/summon/stalker,/datum/eldritch_knowledge/spell/flame_birth)
+>>>>>>> upstream/master
