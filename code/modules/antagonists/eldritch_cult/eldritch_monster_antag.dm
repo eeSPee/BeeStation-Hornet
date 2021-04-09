@@ -7,7 +7,7 @@
 	job_rank = ROLE_HERETIC
 	var/antag_hud_type = ANTAG_HUD_HERETIC
 	var/antag_hud_name = "heretic_beast"
-	var/datum/antagonist/heretic/master
+	var/datum/antagonist/master
 
 /datum/antagonist/heretic_monster/admin_add(datum/mind/new_owner,mob/admin)
 	new_owner.add_antag_datum(src)
@@ -16,13 +16,11 @@
 
 /datum/antagonist/heretic_monster/greet()
 	owner.current.playsound_local(get_turf(owner.current), 'sound/ambience/antag/ecult_op.ogg', 100, FALSE, pressure_affected = FALSE)//subject to change
-	to_chat(owner, "<span class='boldannounce'>You became an Eldritch Horror, servant of [master]!</span>")
-	owner.current.client?.tgui_panel?.give_antagonist_popup("Eldritch Horror",
-		"You are an Eldritch Horror, follow your master's orders.")
+	to_chat(owner, "<span class='boldannounce'>You became an Eldritch Horror!</span>")
 
 /datum/antagonist/heretic_monster/on_removal()
 	if(master)
-		to_chat(owner, "<span class='boldannounce'>Your no longer bound to your master, [master.owner.current.real_name]</span>")
+		to_chat(owner, "<span class='boldannounce'>Your master is no longer [master.owner.current.real_name]</span>")
 		master = null
 	return ..()
 

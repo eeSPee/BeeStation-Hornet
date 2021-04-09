@@ -571,8 +571,9 @@
 		return
 	var/desired_type = A.type
 
+	var/list/nearby_things = range(1, get_turf(src))
 	var/list/valid_things = list()
-	for(var/atom/thing as() in range(1, get_turf(src)))
+	for(var/atom/thing in nearby_things)
 		if(thing.type != desired_type)
 			continue
 		valid_things.Add(thing)
@@ -619,7 +620,8 @@
 		for(var/item in input_list)
 			if(!isnull(item) && !isnum_safe(item))
 				if(istext(item))
-					for(var/atom/thing as() in nearby_things)
+					for(var/i in nearby_things)
+						var/atom/thing = i
 						if(ismob(thing) && !isliving(thing))
 							continue
 						if(findtext(addtext(thing.name," ",thing.desc), item, 1, 0) )
@@ -627,7 +629,8 @@
 				else
 					var/atom/A = item
 					var/desired_type = A.type
-					for(var/atom/thing as() in nearby_things)
+					for(var/i in nearby_things)
+						var/atom/thing = i
 						if(thing.type != desired_type)
 							continue
 						if(ismob(thing) && !isliving(thing))
@@ -776,7 +779,10 @@
 
 	activate_pin(3)
 	audible_message("[icon2html(src, hearers(src))] *beep* *beep* *beep*", null, hearing_range)
-	playsound(get_turf(src), 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
+	for(var/CHM in get_hearers_in_view(hearing_range, src))
+		if(ismob(CHM))
+			var/mob/LM = CHM
+			LM.playsound_local(get_turf(src), 'sound/machines/triple_beep.ogg', ASSEMBLY_BEEP_VOLUME, TRUE)
 
 /obj/item/integrated_circuit/input/ntnet_packet
 	name = "NTNet networking circuit"

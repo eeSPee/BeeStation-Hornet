@@ -4,6 +4,7 @@
 	school = "transmutation"
 	charge_type = "recharge"
 	charge_max	= 150
+	charge_counter = 0
 	clothes_req = FALSE
 	stat_allowed = FALSE
 	invocation = "KN'A FTAGHU, PUCK 'BTHNK!"
@@ -31,7 +32,7 @@
 		to_chat(user, "<span class='notice'>[target.p_theyre(TRUE)] too far away!</span>")
 		return
 
-	if(target.anti_magic_check() || HAS_TRAIT(target, TRAIT_WARDED))
+	if(target.anti_magic_check())
 		to_chat(user, "<span class='warning'>The spell had no effect!</span>")
 		target.visible_message("<span class='danger'>[target]'s face bursts into flames, which instantly burst outward, leaving [target] unharmed!</span>", \
 						   "<span class='danger'>Your face starts burning up, but the flames are repulsed by your anti-magic protection!</span>")

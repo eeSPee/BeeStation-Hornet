@@ -15,7 +15,6 @@
 	name = "Communion"
 	desc = "Whispered words that all cultists can hear.<br><b>Warning:</b>Nearby non-cultists can still hear you."
 	button_icon_state = "cult_comms"
-	check_flags = AB_CHECK_CONSCIOUS
 
 /datum/action/innate/cult/comm/Activate()
 	var/input = stripped_input(usr, "Please choose a message to tell to the other acolytes.", "Voice of Blood", "")
@@ -135,7 +134,7 @@
 	for(var/datum/mind/B in team.members)
 		if(B.current)
 			for(var/datum/action/innate/cult/mastervote/vote in B.current.actions)
-				qdel(vote)
+				vote.Remove(B.current)
 			if(!B.current.incapacitated())
 				to_chat(B.current,"<span class='cultlarge'>[Nominee] has won the cult's support and is now their master. Follow [Nominee.p_their()] orders to the best of your ability!</span>")
 	return TRUE
@@ -149,7 +148,6 @@
 	name = "Final Reckoning"
 	desc = "A single-use spell that brings the entire cult to the master's location."
 	button_icon_state = "sintouch"
-	check_flags = AB_CHECK_CONSCIOUS
 
 /datum/action/innate/cult/master/finalreck/Activate()
 	var/datum/antagonist/cult/antag = owner.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
@@ -158,7 +156,7 @@
 	for(var/i in 1 to 4)
 		chant(i)
 		var/list/destinations = list()
-		for(var/turf/T as() in (RANGE_TURFS(1, owner) - get_turf(owner)))
+		for(var/turf/T in orange(1, owner))
 			if(!is_blocked_turf(T, TRUE))
 				destinations += T
 		if(!LAZYLEN(destinations))
@@ -266,7 +264,7 @@
 
 	var/datum/antagonist/cult/C = caller.mind.has_antag_datum(/datum/antagonist/cult,TRUE)
 
-	if(ranged_ability_user in viewers(7, get_turf(target)))
+	if(target in view(7, get_turf(ranged_ability_user)))
 		if(C.cult_team.blood_target)
 			to_chat(ranged_ability_user, "<span class='cult'>The cult has already designated a target!</span>")
 			return FALSE
@@ -438,7 +436,7 @@
 	var/turf/T = get_turf(ranged_ability_user)
 	if(!isturf(T))
 		return FALSE
-	if(ranged_ability_user in viewers(7, get_turf(target)))
+	if(target in view(7, get_turf(ranged_ability_user)))
 		if((!(iscultist(target) || istype(target, /obj/structure/destructible/cult)) || target == caller) && !(attached_action.throwing))
 			return
 		if(!attached_action.throwing)

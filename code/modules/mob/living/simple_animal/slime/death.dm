@@ -1,7 +1,6 @@
 /mob/living/simple_animal/slime/death(gibbed)
 	if(stat == DEAD)
 		return
-	remove_form_spawner_menu()
 	if(!gibbed)
 		if(is_adult)
 			var/mob/living/simple_animal/slime/M = new(loc, colour)
@@ -11,7 +10,7 @@
 			is_adult = FALSE
 			maxHealth = 150
 			for(var/datum/action/innate/slime/reproduce/R in actions)
-				qdel(R)
+				R.Remove(src)
 			var/datum/action/innate/slime/evolve/E = new
 			E.Grant(src)
 			revive(full_heal = 1)
@@ -42,6 +41,4 @@
 			X.stored_slimes -= src
 	if(stat != DEAD)
 		GLOB.total_slimes--
-	remove_form_spawner_menu()
-	master = null
 	return ..()

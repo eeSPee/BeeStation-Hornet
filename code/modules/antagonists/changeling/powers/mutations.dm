@@ -105,7 +105,10 @@
 		return 1
 
 /datum/action/changeling/suit/Remove(mob/user)
-	check_suit(user)
+	if(!ishuman(user))
+		return
+	var/mob/living/carbon/human/H = user
+	check_suit(H)
 	..()
 
 /datum/action/changeling/suit/sting_action(mob/living/carbon/human/user)

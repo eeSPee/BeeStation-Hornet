@@ -59,7 +59,7 @@
 	if(world.time > next_portal)
 		next_portal = world.time + 100
 		var/list/turf/possible_turfs = list()
-		for(var/turf/T as() in RANGE_TURFS(8, owner))
+		for(var/turf/T in range(owner, 8))
 			if(!T.density)
 				var/clear = TRUE
 				for(var/obj/O in T)
@@ -76,7 +76,7 @@
 		if(!first_turf)
 			return
 
-		possible_turfs -= (possible_turfs & RANGE_TURFS(3, first_turf))
+		possible_turfs -= (possible_turfs & range(first_turf, 3))
 
 		var/turf/second_turf = pick(possible_turfs)
 		if(!second_turf)
@@ -253,6 +253,5 @@
 			to_chat(victim, "<span class='name'>[name]</span> exclaims, \"<span class='robotic'>Level 10 infraction alert!\"</span>")
 
 /obj/effect/hallucination/simple/securitron/Destroy()
-	victim = null
 	STOP_PROCESSING(SSfastprocess,src)
 	return ..()

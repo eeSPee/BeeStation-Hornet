@@ -30,9 +30,9 @@
 /turf/open/floor/wood/try_replace_tile(obj/item/stack/tile/T, mob/user, params)
 	if(T.turf_type == type)
 		return
-	var/obj/item/tool = user.is_holding_tool_quality(TOOL_SCREWDRIVER)
+	var/obj/item/tool = user.is_holding_item_of_type(/obj/item/screwdriver)
 	if(!tool)
-		tool = user.is_holding_tool_quality(TOOL_CROWBAR)
+		tool = user.is_holding_item_of_type(/obj/item/crowbar)
 	if(!tool)
 		return
 	var/turf/open/floor/plating/P = pry_tile(tool, user, TRUE)
@@ -300,13 +300,3 @@
 	underlay_appearance.plane = PLANE_SPACE
 	return TRUE
 
-/turf/open/floor/wax
-	name = "wax"
-	icon_state = "honeyfloor"
-	desc = "Hard wax. Makes you feel like part of a hive."
-	floor_tile = /obj/item/stack/tile/mineral/wax
-	footstep = FOOTSTEP_WOOD
-	barefootstep = FOOTSTEP_WOOD_BAREFOOT
-	clawfootstep = FOOTSTEP_WOOD_CLAW
-	heavyfootstep = FOOTSTEP_GENERIC_HEAVY
-	tiled_dirt = FALSE

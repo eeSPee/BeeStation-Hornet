@@ -245,8 +245,7 @@
 	updateUsrDialog()
 	sleep(30) //only sleep if called by user
 
-	var/obj/machinery/computer/rdconsole/RDC = locate() in oview(7,src)
-	if(RDC)
+	for(var/obj/machinery/computer/rdconsole/RDC in oview(7,src))
 		RDC.stored_research.copy_research_to(stored_research)
 		temp = "Processed equipment designs.<br>"
 		//check if the tech coefficients have changed
@@ -365,7 +364,7 @@
 	if(href_list["process_queue"])
 		spawn(0)
 			if(processing_queue || being_built)
-				return
+				return FALSE
 			processing_queue = 1
 			process_queue()
 			processing_queue = 0
@@ -399,8 +398,8 @@
 					break
 
 	if(href_list["remove_mat"] && href_list["material"])
-		var/datum/material/mat = locate(href_list["material"])
-		eject_sheets(mat, text2num(href_list["remove_mat"]))
+		var/datum/material/Mat = locate(href_list["material"])
+		eject_sheets(Mat, text2num(href_list["remove_mat"]))
 
 	updateUsrDialog()
 	return

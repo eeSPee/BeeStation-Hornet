@@ -109,7 +109,8 @@
 		return
 	obj_flags |= EMAGGED
 	update_icon()
-	user?.visible_message("<span class='warning'>Sparks fly out of [src]!</span>",
+	if(user)
+		user.visible_message("<span class='warning'>Sparks fly out of [src]!</span>",
 							"<span class='notice'>You emag [src], disabling its thermal sensors.</span>")
 	playsound(src, "sparks", 50, 1)
 

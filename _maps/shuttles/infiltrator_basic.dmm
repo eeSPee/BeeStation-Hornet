@@ -11,6 +11,12 @@
 "ac" = (
 /turf/closed/wall/r_wall/syndicate,
 /area/shuttle/syndicate/bridge)
+"ad" = (
+/obj/machinery/porta_turret/syndicate/shuttle{
+	dir = 10
+	},
+/turf/closed/wall/r_wall/syndicate,
+/area/shuttle/syndicate/hallway)
 "ae" = (
 /obj/structure/window/plastitanium,
 /obj/machinery/door/poddoor/shutters{
@@ -161,22 +167,11 @@
 /turf/open/floor/plasteel/dark,
 /area/shuttle/syndicate/bridge)
 "aw" = (
-/obj/effect/turf_decal/tile/neutral,
-/obj/effect/turf_decal/tile/neutral{
-	dir = 8
+/obj/machinery/porta_turret/syndicate/shuttle{
+	dir = 9
 	},
-/obj/machinery/turretid{
-	ailock = 1;
-	desc = "Used to control the shuttle's automated defenses.";
-	icon_state = "control_kill";
-	lethal = 1;
-	name = "infiltrator turret controls";
-	pixel_y = -30;
-	req_access = null;
-	req_access_txt = "150"
-	},
-/turf/open/floor/plasteel/dark,
-/area/shuttle/syndicate/bridge)
+/turf/closed/wall/r_wall/syndicate,
+/area/shuttle/syndicate/eva)
 "ax" = (
 /turf/closed/wall/r_wall/syndicate,
 /area/shuttle/syndicate/eva)
@@ -269,6 +264,18 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/shuttle/syndicate/hallway)
+"aF" = (
+/obj/machinery/porta_turret/syndicate/shuttle{
+	dir = 5
+	},
+/turf/closed/wall/r_wall/syndicate,
+/area/shuttle/syndicate/armory)
+"aG" = (
+/obj/machinery/porta_turret/syndicate/shuttle{
+	dir = 9
+	},
+/turf/closed/wall/r_wall/syndicate,
+/area/shuttle/syndicate/medical)
 "aH" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 4;
@@ -1166,7 +1173,7 @@
 	dir = 10
 	},
 /turf/closed/wall/r_wall/syndicate,
-/area/shuttle/syndicate/bridge)
+/area/shuttle/syndicate/armory)
 "pd" = (
 /obj/machinery/porta_turret/syndicate/shuttle{
 	dir = 5
@@ -1178,12 +1185,18 @@
 /obj/effect/turf_decal/bot_white,
 /turf/open/floor/plasteel/dark,
 /area/shuttle/syndicate/eva)
+"In" = (
+/obj/machinery/porta_turret/syndicate/shuttle{
+	dir = 6
+	},
+/turf/closed/wall/r_wall/syndicate,
+/area/shuttle/syndicate/hallway)
 "MJ" = (
 /obj/machinery/porta_turret/syndicate/shuttle{
 	dir = 6
 	},
 /turf/closed/wall/r_wall/syndicate,
-/area/shuttle/syndicate/bridge)
+/area/shuttle/syndicate/medical)
 
 (1,1,1) = {"
 aa
@@ -1199,7 +1212,7 @@ aa
 aa
 aa
 aa
-ab
+aG
 aJ
 aJ
 aJ
@@ -1218,7 +1231,7 @@ aa
 aa
 aa
 aa
-ab
+aw
 ax
 ax
 ax
@@ -1316,7 +1329,7 @@ ag
 an
 at
 ac
-dp
+ad
 aa
 ax
 aN
@@ -1414,7 +1427,7 @@ aa
 ae
 ak
 ap
-aw
+at
 ac
 aA
 aE
@@ -1466,7 +1479,7 @@ am
 as
 at
 ac
-MJ
+In
 aa
 aB
 aO
@@ -1568,7 +1581,7 @@ aa
 aa
 aa
 aa
-pd
+aF
 aB
 aB
 aY
@@ -1599,7 +1612,7 @@ aa
 aa
 aa
 aa
-pd
+aF
 bm
 bm
 bm

@@ -106,10 +106,7 @@ Everything else should be handled for you. Good luck soldier.
 	next_process = world.time + default_fire_delay
 	if(L.Adjacent(autofire_target)) //Melee attack? Or ranged attack?
 		next_process = world.time + melee_attack_delay
-		if(isobj(autofire_target))
-			G.attack_obj(autofire_target, L)
-		else
-			G.attack(autofire_target, L)
+		G.attack(autofire_target, L)
 	else
 		G.afterattack(autofire_target,L)
 

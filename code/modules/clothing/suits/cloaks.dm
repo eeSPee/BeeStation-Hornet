@@ -113,12 +113,3 @@
 	resistance_flags = NONE
 	flags_inv = HIDEMASK|HIDEEARS|HIDEEYES|HIDEFACE
 	flags_cover = HEADCOVERSEYES
-
-/obj/item/clothing/neck/cloak/chap/bishop
-	name = "bishop's cloak"
-	desc = "Become the space pope."
-	icon_state = "bishopcloak"
-
-/obj/item/clothing/neck/cloak/chap/bishop/black
-	name = "black bishop's cloak"
-	icon_state = "blackbishopcloak"

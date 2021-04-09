@@ -30,7 +30,6 @@
 		SS = new
 		SS.marked_item = src
 		user.mind.AddSpell(SS)
-	wield(user)
 
 /obj/item/twohanded/clockwork/examine(mob/user)
 	. = ..()
