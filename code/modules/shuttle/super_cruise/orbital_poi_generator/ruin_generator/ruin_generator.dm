@@ -47,6 +47,8 @@
 
 	var/list/valid_ruin_parts = list()
 
+	var/datum/biome/dungeon = pickweight(list(/datum/biome/abandoned = 6, /datum/biome/xeno = 2, /datum/biome/netherworld = 1, /datum/biome/blob = 2, /datum/biome/ratvar = 1))
+
 	for(var/datum/map_template/ruin_part/ruinpart as() in GLOB.loaded_ruin_parts)
 		valid_ruin_parts[ruinpart] = ruinpart.max_occurances
 
@@ -273,7 +275,6 @@
 
 	//Repopulate areas
 	repopulate_sorted_areas()
-	var/datum/biome/dungeon = pickweight(list(/datum/biome/abandoned = 6, /datum/biome/xeno = 2, /datum/biome/netherworld = 1, /datum/biome/blob = 2, /datum/biome/ratvar = 1))
 	
 	//Place trash
 	for(var/place in blocked_turfs)
