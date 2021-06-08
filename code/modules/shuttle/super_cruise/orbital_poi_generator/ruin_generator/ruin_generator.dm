@@ -285,12 +285,12 @@
 		if(isspaceturf(T) || isclosedturf(T))
 			continue
 		if(locate(/obj) in T)
-			if(prob(structure_damage_prob))
+			if(prob(dungeon.structure_damage_prob))
 				var/obj/structure/S = locate() in T
 				if(S)
 					S.take_damage(rand(0, S.max_integrity * 1.5))
 			continue
-		if(prob(floor_break_prob) && istype(T, /turf/open/floor/plasteel))
+		if(prob(dungeon.floor_break_prob) && istype(T, /turf/open/floor/plasteel))
 			T = T.ScrapeAway()
 		//Spawn floortrash.
 		var/new_floortrash = pickweight(floortrash)
@@ -300,12 +300,12 @@
 		for(var/direction in GLOB.cardinals)
 			var/turf/T1 = get_step(T, direction)
 			if(isclosedturf(T1))
-				var/new_directional_walltrash = pickweight(directional_walltrash)
+				var/new_directional_walltrash = pickweight(biome.directional_walltrash)
 				if(ispath(new_directional_walltrash))
 					var/atom/A = new new_directional_walltrash(T)
 					A.setDir(direction)
 				else
-					var/new_nondirectional_walltrash = pickweight(nondirectional_walltrash)
+					var/new_nondirectional_walltrash = pickweight(biome.nondirectional_walltrash)
 					if(ispath(new_nondirectional_walltrash))
 						var/atom/A = new new_nondirectional_walltrash(T)
 						switch(direction)
