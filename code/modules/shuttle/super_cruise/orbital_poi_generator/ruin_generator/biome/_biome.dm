@@ -13,5 +13,6 @@
 	var/wall_chance = 0
 	var/list/nondirectional_walltrash = list()
 	
+	// - MOBS -
 	var/mob_chance = 0
 	var/list/mob_list = list()		
