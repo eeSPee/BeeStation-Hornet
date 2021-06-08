@@ -293,7 +293,7 @@
 		if(prob(dungeon.floor_break_prob) && istype(T, /turf/open/floor/plasteel))
 			T = T.ScrapeAway()
 		//Spawn floortrash.
-		var/new_floortrash = pickweight(floortrash)
+		var/new_floortrash = pickweight(biome.floortrash)
 		if(ispath(new_floortrash))
 			new new_floortrash(T)
 		//Check for walls and spawn walltrash
