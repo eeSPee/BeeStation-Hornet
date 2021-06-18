@@ -6,8 +6,6 @@
 
 /datum/antagonist/teratoma/on_gain()
 	owner.special_role = "Teratoma"
-	var/datum/objective/chaos/C = new
-	add_objective(C)
 	..()
 
 /datum/antagonist/teratoma/greet()
@@ -47,6 +45,30 @@
 	antagpanel_category = "Changeling"
 	job_rank = ROLE_TERATOMA
 
+/datum/antagonist/teratoma/hugbox/on_gain()
+	..()
+	var/datum/objective/chaos/C = new
+	C.update_explanation_text()
+	add_objective(C)
+	
 /datum/antagonist/teratoma/hugbox/greet()
 	..()
 	to_chat(owner, "<span class='userdanger'>Avoid killing unprovoked, kill only in self defense!</span>")
+
+
+//Teratoma objective
+
+/datum/objective/chaos
+	name = "spread chaos"
+	explanation_text = "Spread misery and chaos upon the station."
+	var/directive = ""
+
+/datum/objective/chaos/check_completion()
+	return TRUE
+
+/datum/objective/chaos/update_explanation_text()
+	..()
+	if(directive == "")
+		explanation_text = "Spread misery and chaos upon the station."
+	else
+		explanation_text = "Follow your directive: [directive]"
